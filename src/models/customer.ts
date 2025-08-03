@@ -1,0 +1,61 @@
+import { Schema } from "effect";
+import { idSchema } from "../idGenerator";
+import { Email } from "./emailValidator";
+import { GetWorkspaceResponseSchema } from "./workspace";
+
+export const GetCustomerResponseSchema = Schema.Struct({
+	id: idSchema("cust", "customer"),
+	name: Schema.String,
+	email: Email,
+	phone: Schema.String.pipe(Schema.optional),
+	workspaceId: Schema.Union(
+		idSchema("wosp", "workspace"),
+		GetWorkspaceResponseSchema,
+	),
+	externalId: Schema.String.pipe(Schema.optional),
+	active: Schema.Boolean,
+	createdAt: Schema.DateFromString,
+	updatedAt: Schema.DateFromString,
+}).annotations({
+	title: "Customer",
+});
+
+export type GetCustomerResponse = typeof GetCustomerResponseSchema.Type;
+export const ListCustomersQuerySchema = Schema.Struct({
+	page: Schema.Number.pipe(
+		Schema.propertySignature,
+		Schema.withConstructorDefault(() => 0),
+	),
+	itemsPerPage: Schema.Number.pipe(
+		Schema.propertySignature,
+		Schema.withConstructorDefault(() => 30),
+	),
+	email: Schema.String,
+	name: Schema.String,
+}).pipe(Schema.partial);
+
+export const ListCustomersResponseSchema = Schema.Struct({
+	items: GetCustomerResponseSchema.pipe(Schema.Array),
+	totalPages: Schema.Number,
+});
+
+export type ListCustomersResponse = typeof ListCustomersResponseSchema.Type;
+
+export const CreateCustomerRequestSchema = Schema.Struct({
+	name: Schema.String,
+	email: Email,
+	phone: Schema.String.pipe(Schema.optional),
+	externalId: Schema.String.pipe(Schema.optional),
+});
+
+export type CreateCustomerRequest = typeof CreateCustomerRequestSchema.Type;
+
+export const EditCustomerRequestSchema = Schema.Struct({
+	name: Schema.String.pipe(Schema.optional),
+	email: Email.pipe(Schema.optional),
+	phone: Schema.String.pipe(Schema.optional),
+	externalId: Schema.String.pipe(Schema.optional),
+	active: Schema.Boolean.pipe(Schema.optional),
+});
+
+export type EditCustomerRequest = typeof EditCustomerRequestSchema.Type;
