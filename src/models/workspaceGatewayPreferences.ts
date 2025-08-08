@@ -10,16 +10,16 @@ export const GatewayStrategySchema = Schema.Literal(
 );
 
 export const WorkspaceGatewayPreferencesSchema = Schema.Struct({
-	priority: Schema.Array(Schema.String).pipe(Schema.optional),
+	priority: Schema.Array(Schema.NonEmptyString).pipe(Schema.optional),
 	fallback: Schema.Boolean.pipe(Schema.optional),
 	limits: Schema.Record({
-		key: Schema.String,
+		key: Schema.NonEmptyString,
 		value: Schema.Number,
 	}).pipe(Schema.optional),
 	working_hours: Schema.Record({
-		key: Schema.String,
+		key: Schema.NonEmptyString,
 		value: Schema.Array(
-			Schema.String.pipe(
+			Schema.NonEmptyString.pipe(
 				Schema.pattern(/^\d{2}:\d{2}-\d{2}:\d{2}$/),
 				Schema.transform(
 					Schema.Struct({

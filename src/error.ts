@@ -3,8 +3,8 @@ import { Console, Data, Effect, Schema } from "effect";
 import { ParseError } from "effect/ParseResult";
 
 export const APIErrorResponseSchema = Schema.Struct({
-	message: Schema.String,
-	code: Schema.String,
+	message: Schema.NonEmptyString,
+	code: Schema.NonEmptyString,
 	error: Schema.optional(Schema.Unknown),
 });
 

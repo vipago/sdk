@@ -31,7 +31,7 @@ export function idSchema<Prefix extends string>(
 	size?: number,
 ) {
 	return Schema.asSchema(
-		Schema.String.pipe(
+		Schema.NonEmptyString.pipe(
 			Schema.startsWith(`${prefix}_`),
 			Schema.annotations({
 				examples: [generateRandomId(prefix, size) as string],

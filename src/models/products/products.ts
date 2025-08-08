@@ -4,8 +4,8 @@ import { GetWorkspaceResponseSchema } from "../workspace";
 
 export const GetProductResponseSchema = Schema.Struct({
 	id: idSchema("prod", "Produto"),
-	name: Schema.String,
-	iconUrl: Schema.String.pipe(Schema.NullOr),
+	name: Schema.NonEmptyString,
+	iconUrl: Schema.NonEmptyString.pipe(Schema.NullOr),
 	workspaceId: Schema.Union(
 		idSchema("wosp", "Workspace"),
 		GetWorkspaceResponseSchema,
@@ -33,8 +33,8 @@ export const ListProductsRequestSchema = Schema.Struct({
 });
 export type ListProductsRequest = typeof ListProductsRequestSchema.Type;
 export const CreateProductRequestSchema = Schema.Struct({
-	name: Schema.String,
-	iconUrl: Schema.String.pipe(
+	name: Schema.NonEmptyString,
+	iconUrl: Schema.NonEmptyString.pipe(
 		Schema.NullOr,
 		Schema.propertySignature,
 		Schema.withConstructorDefault(() => null),
@@ -43,8 +43,8 @@ export const CreateProductRequestSchema = Schema.Struct({
 export type CreateProductRequest = typeof CreateProductRequestSchema.Type;
 
 export const EditProductRequestSchema = Schema.Struct({
-	name: Schema.String.pipe(Schema.optional),
-	iconUrl: Schema.String.pipe(Schema.NullOr, Schema.optional),
+	name: Schema.NonEmptyString.pipe(Schema.optional),
+	iconUrl: Schema.NonEmptyString.pipe(Schema.NullOr, Schema.optional),
 	active: Schema.optional(Schema.Boolean),
 });
 export type EditProductRequest = typeof EditProductRequestSchema.Type;

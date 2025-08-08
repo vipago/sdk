@@ -46,5 +46,5 @@ export const listAvailablePaymentMethods = route({
 	method: "get",
 	url: "/api/v1/available-payment-methods",
 	client: WorkspaceApiClient,
-	responseSchema: Schema.Array(Schema.String),
+	responseSchema: Schema.Array(Schema.NonEmptyString),
 });

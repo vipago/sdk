@@ -50,7 +50,7 @@ const createStripeCardPaymentMethod = Effect.fn(
 		);
 		const paymentMethodResult = yield* response.json.pipe(
 			Effect.andThen(
-				Schema.decodeUnknown(Schema.Struct({ id: Schema.String })),
+				Schema.decodeUnknown(Schema.Struct({ id: Schema.NonEmptyString })),
 			),
 		);
 		return paymentMethodResult.id;

@@ -8,19 +8,19 @@ import {
 
 // Sample schema definitions for testing
 const UserSchema = Schema.Struct({
-	id: Schema.String,
-	name: Schema.String,
-	email: Schema.String,
+	id: Schema.NonEmptyString,
+	name: Schema.NonEmptyString,
+	email: Schema.NonEmptyString,
 });
 
 const ProductSchema = Schema.Struct({
-	id: Schema.String,
-	name: Schema.String,
+	id: Schema.NonEmptyString,
+	name: Schema.NonEmptyString,
 	price: Schema.Number,
 });
 
 const SearchParamsSchema = Schema.Struct({
-	query: Schema.String,
+	query: Schema.NonEmptyString,
 	page: Schema.Number.pipe(Schema.optional),
 });
 

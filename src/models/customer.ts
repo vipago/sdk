@@ -5,14 +5,14 @@ import { GetWorkspaceResponseSchema } from "./workspace";
 
 export const GetCustomerResponseSchema = Schema.Struct({
 	id: idSchema("cust", "customer"),
-	name: Schema.String,
+	name: Schema.NonEmptyString,
 	email: Email,
-	phone: Schema.String.pipe(Schema.optional),
+	phone: Schema.NonEmptyString.pipe(Schema.optional),
 	workspaceId: Schema.Union(
 		idSchema("wosp", "workspace"),
 		GetWorkspaceResponseSchema,
 	),
-	externalId: Schema.String.pipe(Schema.optional),
+	externalId: Schema.NonEmptyString.pipe(Schema.optional),
 	active: Schema.Boolean,
 	createdAt: Schema.DateFromString,
 	updatedAt: Schema.DateFromString,
@@ -30,8 +30,8 @@ export const ListCustomersQuerySchema = Schema.Struct({
 		Schema.propertySignature,
 		Schema.withConstructorDefault(() => 30),
 	),
-	email: Schema.String,
-	name: Schema.String,
+	email: Schema.NonEmptyString,
+	name: Schema.NonEmptyString,
 }).pipe(Schema.partial);
 
 export const ListCustomersResponseSchema = Schema.Struct({
@@ -42,19 +42,19 @@ export const ListCustomersResponseSchema = Schema.Struct({
 export type ListCustomersResponse = typeof ListCustomersResponseSchema.Type;
 
 export const CreateCustomerRequestSchema = Schema.Struct({
-	name: Schema.String,
+	name: Schema.NonEmptyString,
 	email: Email,
-	phone: Schema.String.pipe(Schema.optional),
-	externalId: Schema.String.pipe(Schema.optional),
+	phone: Schema.NonEmptyString.pipe(Schema.optional),
+	externalId: Schema.NonEmptyString.pipe(Schema.optional),
 });
 
 export type CreateCustomerRequest = typeof CreateCustomerRequestSchema.Type;
 
 export const EditCustomerRequestSchema = Schema.Struct({
-	name: Schema.String.pipe(Schema.optional),
+	name: Schema.NonEmptyString.pipe(Schema.optional),
 	email: Email.pipe(Schema.optional),
-	phone: Schema.String.pipe(Schema.optional),
-	externalId: Schema.String.pipe(Schema.optional),
+	phone: Schema.NonEmptyString.pipe(Schema.optional),
+	externalId: Schema.NonEmptyString.pipe(Schema.optional),
 	active: Schema.Boolean.pipe(Schema.optional),
 });
 

@@ -10,7 +10,7 @@ export namespace PaymentMethodCreation {
 		export class PaymentMethodRequest extends Schema.TaggedClass<PaymentMethodRequest>(
 			"ClientPacket.PaymentMethodRequest",
 		)("paymentMethodRequest", {
-			paymentMethodName: Schema.String,
+			paymentMethodName: Schema.NonEmptyString,
 			customerId: idSchema("cust", "Cliente"),
 		}) {}
 		export class PaymentMethodCreationResponse extends Schema.TaggedClass<PaymentMethodCreationResponse>(
@@ -38,8 +38,10 @@ export namespace PaymentMethodCreation {
 		export class GatewayRequest extends Schema.TaggedClass<GatewayRequest>(
 			"ServerGatewayRequest",
 		)("serverGatewayRequest", {
-			gatewayInternalName: Schema.String,
-			apiKey: Schema.String.pipe(Schema.optionalWith({ nullable: true })),
+			gatewayInternalName: Schema.NonEmptyString,
+			apiKey: Schema.NonEmptyString.pipe(
+				Schema.optionalWith({ nullable: true }),
+			),
 		}) {}
 		export class Done extends Schema.TaggedClass<Done>("Done")("done", {
 			paymentMethod: GetPaymentMethodResponseSchema,

@@ -5,7 +5,7 @@ import { Email } from "./emailValidator";
 
 export const GetUserResponseSchema = Schema.Struct({
 	id: idSchema("us", "user"),
-	name: Schema.String,
+	name: Schema.NonEmptyString,
 	email: Email.annotations({
 		description: "Email do usuário",
 	}),
@@ -13,8 +13,8 @@ export const GetUserResponseSchema = Schema.Struct({
 		description:
 			"Permissões e funcionalidades do usuário. Controla as permissões e a funcionalidades que o usuário pode usar e diferentes rotas precisam de features diferentes.",
 	}),
-	createdAt: Schema.String,
-	updatedAt: Schema.String,
+	createdAt: Schema.NonEmptyString,
+	updatedAt: Schema.NonEmptyString,
 }).annotations({
 	title: "User",
 });
@@ -23,7 +23,7 @@ export type GetUserResponse = typeof GetUserResponseSchema.Type;
 
 export const GetUserByEmailResponseSchema = Schema.Struct({
 	id: idSchema("us", "user"),
-	name: Schema.String,
+	name: Schema.NonEmptyString,
 	email: Email.annotations({
 		description: "User's email",
 	}),

@@ -5,7 +5,7 @@ import { GetUserResponseSchema } from "./user";
 
 export const GetWorkspaceResponseSchema = Schema.Struct({
 	id: idSchema("wosp", "workspace"),
-	name: Schema.String,
+	name: Schema.NonEmptyString,
 	ownerId: Schema.Union(
 		idSchema("us", "user"),
 		GetUserResponseSchema,
@@ -19,7 +19,7 @@ export const GetWorkspaceResponseSchema = Schema.Struct({
 		description:
 			"Essa chave pode ser usada como chave de API da vipago. Como já é associada a uma workspace, não precisa do header `X-Use-Workspace` quando essa chave é utilizada.",
 	}),
-	logoUrl: Schema.optional(Schema.String),
+	logoUrl: Schema.optional(Schema.NonEmptyString),
 	createdAt: Schema.DateFromString,
 	updatedAt: Schema.DateFromString,
 }).annotations({
@@ -30,14 +30,14 @@ export const GetWorkspaceResponseSchema = Schema.Struct({
 export type GetWorkspaceResponse = typeof GetWorkspaceResponseSchema.Type;
 
 export const CreateWorkspaceRequestSchema = Schema.Struct({
-	name: Schema.String,
-	logoUrl: Schema.optional(Schema.String),
+	name: Schema.NonEmptyString,
+	logoUrl: Schema.optional(Schema.NonEmptyString),
 });
 export type CreateWorkspaceRequest = typeof CreateWorkspaceRequestSchema.Type;
 
 export const EditWorkspaceRequestSchema = Schema.Struct({
-	name: Schema.optional(Schema.String),
-	logoUrl: Schema.optional(Schema.String),
+	name: Schema.optional(Schema.NonEmptyString),
+	logoUrl: Schema.optional(Schema.NonEmptyString),
 });
 export type EditWorkspaceRequest = typeof EditWorkspaceRequestSchema.Type;
 

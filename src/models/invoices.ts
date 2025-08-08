@@ -44,7 +44,7 @@ export const CreateInvoiceRequestSchema = Schema.Struct({
 	paymentMethodId: idSchema("pm").pipe(Schema.optional),
 	customerId: idSchema("cust"),
 	expiresAt: Schema.optional(Schema.DateFromString),
-	description: Schema.optional(Schema.String),
+	description: Schema.optional(Schema.NonEmptyString),
 	details: InvoiceDetailsSchema.pipe(Schema.Array, Schema.optional),
 	tryCollectingPaymentImmediately: Schema.Boolean.pipe(
 		Schema.annotations({
@@ -63,13 +63,13 @@ export const PayInvoiceRequestSchema = Schema.Struct({
 });
 export const PayInvoiceResponseSchema = Schema.Union(
 	Schema.Struct({
-		id: Schema.String,
+		id: Schema.NonEmptyString,
 		charged: Schema.Literal(false),
-		confirmationUrl: Schema.optional(Schema.String),
-		qrCode: Schema.optional(Schema.String),
+		confirmationUrl: Schema.optional(Schema.NonEmptyString),
+		qrCode: Schema.optional(Schema.NonEmptyString),
 	}),
 	Schema.Struct({
-		id: Schema.String,
+		id: Schema.NonEmptyString,
 		charged: Schema.Literal(true),
 	}),
 );
@@ -105,7 +105,7 @@ export const InvoiceListOptions = Schema.Struct({
 		}),
 		Schema.optional,
 	),
-	externalCustomerId: Schema.String.pipe(
+	externalCustomerId: Schema.NonEmptyString.pipe(
 		Schema.annotations({
 			description: "Filtrar faturas pelo ID externo do cliente",
 		}),

@@ -8,15 +8,15 @@ export namespace Integration {
 	export type Type = GetIntegrationResponse["data"]["_tag"];
 	// Stripe Integration: Representa uma integração com o Stripe
 	export const Stripe = Schema.TaggedStruct("stripe", {
-		apiKey: Schema.String,
-		publicApiKey: Schema.String,
+		apiKey: Schema.NonEmptyString,
+		publicApiKey: Schema.NonEmptyString,
 	}).annotations({
 		title: "Stripe",
 	});
 	// PayPal Integration: Representa uma integração com o PayPal
 	export const PayPal = Schema.TaggedStruct("paypal", {
-		clientId: Schema.String,
-		clientSecret: Schema.String,
+		clientId: Schema.NonEmptyString,
+		clientSecret: Schema.NonEmptyString,
 		environment: Schema.Literal("production", "sandbox"),
 	}).annotations({
 		title: "Paypal",
@@ -24,28 +24,28 @@ export namespace Integration {
 
 	// PIX Integration: Representa uma integração com o PIX (exemplo fictício)
 	export const Pix = Schema.TaggedStruct("pix", {
-		pixKey: Schema.String,
+		pixKey: Schema.NonEmptyString,
 
 		// Informações da empresa
-		companyName: Schema.String, // Nome da empresa
-		companyTaxId: Schema.String, // CNPJ ou CPF da empresa
+		companyName: Schema.NonEmptyString, // Nome da empresa
+		companyTaxId: Schema.NonEmptyString, // CNPJ ou CPF da empresa
 
 		// Endereço de faturamento (somente Brasil)
 		billingAddress: Schema.Struct({
-			street: Schema.String,
-			number: Schema.String,
-			complement: Schema.optional(Schema.String),
-			neighborhood: Schema.String,
-			city: Schema.String,
-			state: Schema.String, // UF
-			zipCode: Schema.String,
+			street: Schema.NonEmptyString,
+			number: Schema.NonEmptyString,
+			complement: Schema.optional(Schema.NonEmptyString),
+			neighborhood: Schema.NonEmptyString,
+			city: Schema.NonEmptyString,
+			state: Schema.NonEmptyString, // UF
+			zipCode: Schema.NonEmptyString,
 		}),
 
 		// Informações de contato
 		contact: Schema.Struct({
-			name: Schema.String,
-			email: Schema.String,
-			phone: Schema.String,
+			name: Schema.NonEmptyString,
+			email: Schema.NonEmptyString,
+			phone: Schema.NonEmptyString,
 		}),
 	}).annotations({
 		title: "Pix",

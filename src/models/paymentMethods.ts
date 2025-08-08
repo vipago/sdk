@@ -10,10 +10,10 @@ export namespace PaymentMethod {
 	export const Card = Schema.TaggedStruct("card", {
 		gatewaySpecificData: Schema.Union(
 			Schema.TaggedStruct("stripe", {
-				stripePaymentMethodId: Schema.String,
+				stripePaymentMethodId: Schema.NonEmptyString,
 			}),
 		),
-		last4Digits: Schema.String,
+		last4Digits: Schema.NonEmptyString,
 	}).annotations({
 		title: "Cartão",
 	});
@@ -34,18 +34,18 @@ export namespace PaymentMethod {
 }
 export namespace NewPaymentMethodDetails {
 	export const Card = Schema.TaggedStruct("card", {
-		cardNumber: Schema.String,
+		cardNumber: Schema.NonEmptyString,
 		expiryMonth: Schema.Number,
 		expiryYear: Schema.Number,
-		cvc: Schema.String,
-		cardholderName: Schema.String,
+		cvc: Schema.NonEmptyString,
+		cardholderName: Schema.NonEmptyString,
 		address: Schema.Struct({
-			line1: Schema.String,
-			line2: Schema.String,
-			city: Schema.String,
-			state: Schema.String,
-			postalCode: Schema.String,
-			country: Schema.String,
+			line1: Schema.NonEmptyString,
+			line2: Schema.NonEmptyString,
+			city: Schema.NonEmptyString,
+			state: Schema.NonEmptyString,
+			postalCode: Schema.NonEmptyString,
+			country: Schema.NonEmptyString,
 		}),
 	}).annotations({
 		title: "Cartão",
