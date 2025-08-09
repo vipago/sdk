@@ -19,7 +19,7 @@ export const GetWorkspaceResponseSchema = Schema.Struct({
 		description:
 			"Essa chave pode ser usada como chave de API da vipago. Como já é associada a uma workspace, não precisa do header `X-Use-Workspace` quando essa chave é utilizada.",
 	}),
-	logoUrl: Schema.optional(Schema.NonEmptyString),
+	logoUrl: Schema.optional(Schema.String),
 	createdAt: Schema.DateFromString,
 	updatedAt: Schema.DateFromString,
 }).annotations({
@@ -31,13 +31,13 @@ export type GetWorkspaceResponse = typeof GetWorkspaceResponseSchema.Type;
 
 export const CreateWorkspaceRequestSchema = Schema.Struct({
 	name: Schema.NonEmptyString,
-	logoUrl: Schema.optional(Schema.NonEmptyString),
+	logoUrl: Schema.optional(Schema.String),
 });
 export type CreateWorkspaceRequest = typeof CreateWorkspaceRequestSchema.Type;
 
 export const EditWorkspaceRequestSchema = Schema.Struct({
 	name: Schema.optional(Schema.NonEmptyString),
-	logoUrl: Schema.optional(Schema.NonEmptyString),
+	logoUrl: Schema.optional(Schema.String),
 });
 export type EditWorkspaceRequest = typeof EditWorkspaceRequestSchema.Type;
 
