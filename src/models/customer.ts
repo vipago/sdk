@@ -12,7 +12,7 @@ export const GetCustomerResponseSchema = Schema.Struct({
 		idSchema("wosp", "workspace"),
 		GetWorkspaceResponseSchema,
 	),
-	externalId: Schema.NonEmptyString.pipe(Schema.optional),
+	externalId: Schema.NonEmptyString.pipe(Schema.optionalWith({nullable: true})),
 	active: Schema.Boolean,
 	createdAt: Schema.DateFromString,
 	updatedAt: Schema.DateFromString,
