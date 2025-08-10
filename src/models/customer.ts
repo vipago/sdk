@@ -7,7 +7,7 @@ export const GetCustomerResponseSchema = Schema.Struct({
 	id: idSchema("cust", "customer"),
 	name: Schema.NonEmptyString,
 	email: Email,
-	phone: Schema.NonEmptyString.pipe(Schema.optional),
+	phone: Schema.NonEmptyString.pipe(Schema.optionalWith({nullable: true})),
 	workspaceId: Schema.Union(
 		idSchema("wosp", "workspace"),
 		GetWorkspaceResponseSchema,
