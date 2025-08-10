@@ -7,12 +7,14 @@ export const GetCustomerResponseSchema = Schema.Struct({
 	id: idSchema("cust", "customer"),
 	name: Schema.NonEmptyString,
 	email: Email,
-	phone: Schema.NonEmptyString.pipe(Schema.optionalWith({nullable: true})),
+	phone: Schema.NonEmptyString.pipe(Schema.optionalWith({ nullable: true })),
 	workspaceId: Schema.Union(
 		idSchema("wosp", "workspace"),
 		GetWorkspaceResponseSchema,
 	),
-	externalId: Schema.NonEmptyString.pipe(Schema.optionalWith({nullable: true})),
+	externalId: Schema.NonEmptyString.pipe(
+		Schema.optionalWith({ nullable: true }),
+	),
 	active: Schema.Boolean,
 	createdAt: Schema.DateFromString,
 	updatedAt: Schema.DateFromString,
@@ -22,11 +24,11 @@ export const GetCustomerResponseSchema = Schema.Struct({
 
 export type GetCustomerResponse = typeof GetCustomerResponseSchema.Type;
 export const ListCustomersQuerySchema = Schema.Struct({
-	page: Schema.Number.pipe(
+	page: Schema.NumberFromString.pipe(
 		Schema.propertySignature,
 		Schema.withConstructorDefault(() => 0),
 	),
-	itemsPerPage: Schema.Number.pipe(
+	itemsPerPage: Schema.NumberFromString.pipe(
 		Schema.propertySignature,
 		Schema.withConstructorDefault(() => 30),
 	),
