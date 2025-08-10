@@ -132,6 +132,7 @@ export const routeWithResponse =
 		expand?: Expand,
 	) =>
 		Effect.gen(function* () {
+			let actualUrl = url;
 			if (method === "get" && body) {
 				const queryParams = new URLSearchParams();
 				for (const [key, value] of Object.entries(
@@ -144,10 +145,10 @@ export const routeWithResponse =
 				const queryString = queryParams.toString();
 				if (queryString) {
 					const separator = url.includes("?") ? "&" : "?";
-					url = `${url}${separator}${queryString}`;
+					actualUrl = `${url}${separator}${queryString}`;
 				}
 			}
-			return yield* HttpClientRequest[method](url).pipe(
+			return yield* HttpClientRequest[method](actualUrl).pipe(
 				expand
 					? HttpClientRequest.setHeader("Expand", expand.join(","))
 					: r => r,
