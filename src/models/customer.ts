@@ -15,7 +15,6 @@ export const GetCustomerResponseSchema = Schema.Struct({
 	externalId: Schema.NonEmptyString.pipe(
 		Schema.optionalWith({ nullable: true }),
 	),
-	active: Schema.Boolean,
 	createdAt: Schema.DateFromString,
 	updatedAt: Schema.DateFromString,
 }).annotations({
@@ -57,7 +56,6 @@ export const EditCustomerRequestSchema = Schema.Struct({
 	email: Email.pipe(Schema.optional),
 	phone: Schema.NonEmptyString.pipe(Schema.optional),
 	externalId: Schema.NonEmptyString.pipe(Schema.optional),
-	active: Schema.Boolean.pipe(Schema.optional),
 });
 
 export type EditCustomerRequest = typeof EditCustomerRequestSchema.Type;
