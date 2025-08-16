@@ -31,7 +31,5 @@
 		"format": "biome check --write * .github .vscode",
 		"fmt": "biome check --write * .github .vscode"
 	},
-	"trustedDependencies": [
-		"@biomejs/biome"
-	]
+	"trustedDependencies": ["@biomejs/biome"]
 }

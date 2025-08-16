@@ -1,5 +1,4 @@
 import { Schema } from "effect";
-import type { WorkspaceFeatures } from "../features";
 import {
 	AuthenticatedApiClient,
 	WorkspaceApiClient,

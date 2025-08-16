@@ -3,9 +3,9 @@ import { WorkspaceApiClient, route } from "../httpClient";
 import {
 	CreateIntegrationRequestSchema,
 	EditIntegrationRequestSchema,
+	type GetIntegrationResponse,
 	GetIntegrationResponseSchema,
 	ListIntegrationsResponseSchema,
-	type GetIntegrationResponse,
 } from "../models/integrations";
 
 export const listIntegrations = route({
