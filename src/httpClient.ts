@@ -20,6 +20,7 @@ export const WorkspaceApiClient = Layer.effect(
 	HttpClient.HttpClient,
 	internal.workspaceApiClientEffect.pipe(Effect.provide(FetchHttpClient.layer)),
 );
+
 /**
  * Interface for the route function with overloads for different API endpoint patterns.
  */
@@ -45,6 +46,7 @@ export interface RouteFunction {
 		method: "get";
 		url: string;
 		client: Layer.Layer<HttpClient.HttpClient>;
+		requestSchema?: Schema.Schema<Req, any, never>;
 		responseSchema: Schema.Schema<ResType, any, never>;
 		name?: string;
 		allowBody: true;
@@ -70,6 +72,7 @@ export interface RouteFunction {
 		method: "get";
 		url: (params: Param) => string;
 		client: Layer.Layer<HttpClient.HttpClient>;
+		requestSchema?: Schema.Schema<Req, any, never>;
 		responseSchema: Schema.Schema<ResType, any, never>;
 		name?: string;
 		allowBody: true;
@@ -82,12 +85,12 @@ export interface RouteFunction {
 	 * @example route({ method: "get", url: "/api/ping", client: UnauthenticatedApiClient })
 	 */
 	<Req = never>(options: {
-		method: "post" | "get" | "del" | "patch" | "put";
+		method: "post" | "del" | "patch" | "put" | "get";
 		url: string;
 		client: Layer.Layer<HttpClient.HttpClient>;
 		responseSchema?: undefined;
 		name?: string;
-		allowBody?: undefined;
+		allowBody?: false;
 	}): ReturnType<typeof internal.routeWithoutResponse<Req>>;
 
 	/**
@@ -98,9 +101,10 @@ export interface RouteFunction {
 		method: "post" | "put" | "patch" | "del" | "get";
 		url: string;
 		client: Layer.Layer<HttpClient.HttpClient>;
+		requestSchema?: Schema.Schema<Req, any, never>;
 		responseSchema: Schema.Schema<ResType, any, never>;
 		name?: string;
-		allowBody?: undefined;
+		allowBody?: false;
 	}): ReturnType<typeof internal.routeWithResponse<Req, ResType>>;
 
 	/**
@@ -111,9 +115,10 @@ export interface RouteFunction {
 		method: "post" | "get" | "del" | "patch" | "put";
 		url: (param: Param) => string;
 		client: Layer.Layer<HttpClient.HttpClient>;
+		requestSchema?: Schema.Schema<Req, any, never>;
 		responseSchema?: undefined;
 		name?: string;
-		allowBody?: undefined;
+		allowBody?: false;
 	}): ReturnType<typeof internal.routeWithoutResponseWithParam<Req, Param>>;
 
 	/**
@@ -124,38 +129,33 @@ export interface RouteFunction {
 		method: "post" | "get" | "del" | "patch" | "put";
 		url: (param: Param) => string;
 		client: Layer.Layer<HttpClient.HttpClient>;
+		requestSchema?: Schema.Schema<Req, any, never>;
 		responseSchema: Schema.Schema<ResType, any, never>;
 		name?: string;
-		allowBody?: undefined;
+		allowBody?: false;
 	}): ReturnType<
 		typeof internal.routeWithResponseAndParam<Req, ResType, Param>
 	>;
 }
 
-/**
- * Creates API route functions with type-safe request and response handling.
- *
- * This function serves as the primary way to define API endpoints in your application.
- * It handles different HTTP methods, URL patterns, request bodies, and response schemas.
- *
- * @see {@link RouteFunction} for the full list of overloads and examples
- */
-export const route: RouteFunction = function route(
-	options: Parameters<RouteFunction>[0],
-) {
-	const {
-		method,
-		url,
-		client,
-		responseSchema,
-		allowBody = false,
-		name = typeof url === "string" ? `${method} ${url}` : `${method}`,
-	} = options;
-	// Static URL with no response schema
+export const route: RouteFunction = function route({
+	method,
+	url,
+	client,
+	responseSchema,
+	requestSchema,
+	allowBody = false,
+	name = typeof url === "string" ? `${method} ${url}` : `${method}`,
+}: Parameters<RouteFunction>[0]) {
 	if (typeof url === "string" && responseSchema === undefined) {
-		return internal.routeWithoutResponse(method, url, client, name);
+		return internal.routeWithoutResponse(
+			method,
+			url,
+			client,
+			name,
+			requestSchema,
+		);
 	}
-	// GET with static URL and response schema (no body)
 	if (
 		method === "get" &&
 		typeof url === "string" &&
@@ -164,7 +164,6 @@ export const route: RouteFunction = function route(
 	) {
 		return internal.routeGet(url, client, responseSchema, name);
 	}
-	// GET with parameterized URL and response schema (no body)
 	if (
 		method === "get" &&
 		typeof url === "function" &&
@@ -173,7 +172,6 @@ export const route: RouteFunction = function route(
 	) {
 		return internal.routeGetWithParam(url, client, responseSchema, name);
 	}
-	// GET with static URL and response schema (with body)
 	if (
 		method === "get" &&
 		typeof url === "string" &&
@@ -186,9 +184,9 @@ export const route: RouteFunction = function route(
 			client,
 			responseSchema,
 			name,
+			requestSchema,
 		);
 	}
-	// GET with parameterized URL and response schema (with body)
 	if (
 		method === "get" &&
 		typeof url === "function" &&
@@ -201,9 +199,9 @@ export const route: RouteFunction = function route(
 			client,
 			responseSchema,
 			name,
+			requestSchema,
 		);
 	}
-	// Static URL with response schema (non-GET or GET with body)
 	if (typeof url === "string" && responseSchema !== undefined) {
 		return internal.routeWithResponse(
 			method,
@@ -211,13 +209,18 @@ export const route: RouteFunction = function route(
 			client,
 			responseSchema,
 			name,
+			requestSchema,
 		);
 	}
-	// Parameterized URL with no response schema
 	if (typeof url === "function" && responseSchema === undefined) {
-		return internal.routeWithoutResponseWithParam(method, url, client, name);
+		return internal.routeWithoutResponseWithParam(
+			method,
+			url,
+			client,
+			name,
+			requestSchema,
+		);
 	}
-	// Parameterized URL with response schema
 	if (typeof url === "function" && responseSchema !== undefined) {
 		return internal.routeWithResponseAndParam(
 			method,
@@ -225,8 +228,8 @@ export const route: RouteFunction = function route(
 			client,
 			responseSchema,
 			name,
+			requestSchema,
 		);
 	}
-	// Fallback case
 	throw new Error(`Invalid route configuration: ${name}`);
 } as unknown as RouteFunction;

@@ -1,8 +1,5 @@
 import { WorkspaceApiClient, route } from "../httpClient";
-import {
-	type WorkspaceGatewayPreferences,
-	WorkspaceGatewayPreferencesSchema,
-} from "../models/workspaceGatewayPreferences";
+import { WorkspaceGatewayPreferencesSchema } from "../models/workspaceGatewayPreferences";
 
 export const getGatewayPreferences = route({
 	client: WorkspaceApiClient,
@@ -12,10 +9,11 @@ export const getGatewayPreferences = route({
 	responseSchema: WorkspaceGatewayPreferencesSchema,
 	name: "getGatewayPreferences",
 });
-export const setGatewayPreferences = route<WorkspaceGatewayPreferences>({
+export const setGatewayPreferences = route({
 	client: WorkspaceApiClient,
 	method: "put",
 	url: (paymentMethodName: string) =>
 		`/api/v1/settings/gateway-preferences/${paymentMethodName}`,
+	requestSchema: WorkspaceGatewayPreferencesSchema,
 	name: "setGatewayPreferences",
 });

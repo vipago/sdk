@@ -79,14 +79,14 @@ export const InvoiceListResultSchema = Schema.Struct({
 });
 
 export const InvoiceListOptions = Schema.Struct({
-	page: Schema.Number.pipe(
+	page: Schema.NumberFromString.pipe(
 		Schema.annotations({
 			description: "Número da página para paginação (começando em 0)",
 		}),
 		Schema.propertySignature,
 		Schema.withConstructorDefault(() => 0),
 	),
-	itemsPerPage: Schema.Number.pipe(
+	itemsPerPage: Schema.NumberFromString.pipe(
 		Schema.annotations({
 			description: "Quantidade de itens por página",
 		}),

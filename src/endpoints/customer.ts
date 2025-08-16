@@ -1,21 +1,19 @@
 import { WorkspaceApiClient, route } from "../httpClient";
 import {
-	type CreateCustomerRequest,
-	type EditCustomerRequest,
+	CreateCustomerRequestSchema,
+	EditCustomerRequestSchema,
 	type GetCustomerResponse,
 	GetCustomerResponseSchema,
-	type ListCustomersQuerySchema,
+	ListCustomersQuerySchema,
 	ListCustomersResponseSchema,
 } from "../models/customer";
 
-export const listCustomers = route<
-	typeof ListCustomersQuerySchema.Type,
-	typeof ListCustomersResponseSchema.Type
->({
+export const listCustomers = route({
 	method: "get",
 	url: "/api/v1/customers",
 	client: WorkspaceApiClient,
 	responseSchema: ListCustomersResponseSchema,
+	requestSchema: ListCustomersQuerySchema,
 	allowBody: true,
 });
 
@@ -25,38 +23,30 @@ export const getCustomer = route<GetCustomerResponse, `cust_${string}`>({
 	client: WorkspaceApiClient,
 	responseSchema: GetCustomerResponseSchema,
 });
-export const createCustomer = route<CreateCustomerRequest, GetCustomerResponse>(
-	{
-		method: "post",
-		url: "/api/v1/customers",
-		client: WorkspaceApiClient,
-		responseSchema: GetCustomerResponseSchema,
-	},
-);
+export const createCustomer = route({
+	method: "post",
+	url: "/api/v1/customers",
+	client: WorkspaceApiClient,
+	requestSchema: CreateCustomerRequestSchema,
+	responseSchema: GetCustomerResponseSchema,
+});
 
-export const editCustomer = route<
-	EditCustomerRequest,
-	GetCustomerResponse,
-	`cust_${string}`
->({
+export const editCustomer = route({
 	method: "patch",
-	url: customerId => `/api/v1/customers/${customerId}`,
+	url: (customerId: `cust_${string}`) => `/api/v1/customers/${customerId}`,
 	client: WorkspaceApiClient,
+	requestSchema: EditCustomerRequestSchema,
 	responseSchema: GetCustomerResponseSchema,
 });
 
-export const deleteCustomer = route<
-	never,
-	GetCustomerResponse,
-	`cust_${string}`
->({
+export const deleteCustomer = route({
 	method: "del",
-	url: customerId => `/api/v1/customers/${customerId}`,
+	url: (customerId: `cust_${string}`) => `/api/v1/customers/${customerId}`,
 	client: WorkspaceApiClient,
 	responseSchema: GetCustomerResponseSchema,
 });
 
-export const getCustomerByExternalId = route<GetCustomerResponse>({
+export const getCustomerByExternalId = route({
 	method: "get",
 	url: externalId =>
 		`/api/v1/customers/by-external-id/${encodeURIComponent(externalId)}`,
@@ -64,18 +54,16 @@ export const getCustomerByExternalId = route<GetCustomerResponse>({
 	responseSchema: GetCustomerResponseSchema,
 });
 
-export const editCustomerByExternalId = route<
-	EditCustomerRequest,
-	GetCustomerResponse
->({
+export const editCustomerByExternalId = route({
 	method: "patch",
 	url: (externalId: string) =>
 		`/api/v1/customers/by-external-id/${encodeURIComponent(externalId)}`,
 	client: WorkspaceApiClient,
+	requestSchema: EditCustomerRequestSchema,
 	responseSchema: GetCustomerResponseSchema,
 });
 
-export const deleteCustomerByExternalId = route<void, GetCustomerResponse>({
+export const deleteCustomerByExternalId = route({
 	method: "del",
 	url: (externalId: string) =>
 		`/api/v1/customers/by-external-id/${encodeURIComponent(externalId)}`,

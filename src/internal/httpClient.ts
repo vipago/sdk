@@ -32,10 +32,12 @@ export const makeClientFilterStatusOk = <E, R>(
 	self: HttpClient.HttpClient.With<E, R>,
 ): HttpClient.HttpClient.With<E | ResponseError, R> =>
 	HttpClient.transformResponse(self, Effect.flatMap(filterStatusOk));
+
 export const genericHttpClient = Effect.andThen(
 	HttpClient.HttpClient,
 	makeClientFilterStatusOk,
 );
+
 /** @internal */
 export const unauthenticatedApiClientEffect = pipe(
 	HttpClient.HttpClient,
@@ -62,6 +64,7 @@ export const unauthenticatedApiClientEffect = pipe(
 		),
 	),
 );
+
 /** @internal */
 export const authenticatedApiClientEffect = pipe(
 	unauthenticatedApiClientEffect,
@@ -80,6 +83,7 @@ export const authenticatedApiClientEffect = pipe(
 		),
 	),
 );
+
 /** @internal */
 export const workspaceApiClientEffect = pipe(
 	authenticatedApiClientEffect,
@@ -98,6 +102,7 @@ export const workspaceApiClientEffect = pipe(
 		),
 	),
 );
+
 /** @internal */
 export const routeWithoutResponse =
 	<T>(
@@ -105,12 +110,17 @@ export const routeWithoutResponse =
 		url: string,
 		client: Layer.Layer<HttpClient.HttpClient>,
 		name = `${method} ${url}`,
+		requestSchema?: Schema.Schema<T, any, never>,
 	) =>
 	(body?: T) =>
 		Effect.gen(function* () {
+			let actualBody = body;
+			if (requestSchema && body !== undefined) {
+				actualBody = yield* Schema.encode(requestSchema)(body);
+			}
 			return yield* HttpClientRequest[method](url).pipe(
-				method !== "get" && body !== undefined
-					? HttpClientRequest.bodyJson(body)
+				method !== "get" && actualBody !== undefined
+					? HttpClientRequest.bodyJson(actualBody)
 					: r => Effect.succeed(r),
 				Effect.orDie,
 				Effect.flatMap((yield* HttpClient.HttpClient).execute),
@@ -118,6 +128,7 @@ export const routeWithoutResponse =
 				Effect.withSpanScoped(name),
 			);
 		}).pipe(Effect.scoped, Effect.provide(client));
+
 /** @internal */
 export const routeWithResponse =
 	<Req, ResType>(
@@ -126,17 +137,23 @@ export const routeWithResponse =
 		client: Layer.Layer<HttpClient.HttpClient>,
 		unexpandedResponseSchema: Schema.Schema<ResType, any, never>,
 		name = `${method} ${url}`,
+		requestSchema?: Schema.Schema<Req, any, never>,
 	) =>
 	<Expand extends GenerateExpandPaths<ResType>[] = []>(
 		body?: Req,
 		expand?: Expand,
 	) =>
 		Effect.gen(function* () {
+			let actualBody = body;
+			if (requestSchema && body !== undefined) {
+				actualBody = yield* Schema.encode(requestSchema)(body);
+			}
+
 			let actualUrl = url;
-			if (method === "get" && body) {
+			if (method === "get" && actualBody) {
 				const queryParams = new URLSearchParams();
 				for (const [key, value] of Object.entries(
-					body as Record<string, unknown>,
+					actualBody as Record<string, unknown>,
 				)) {
 					if (value !== undefined && value !== null) {
 						queryParams.append(key, String(value));
@@ -148,14 +165,14 @@ export const routeWithResponse =
 					actualUrl = `${url}${separator}${queryString}`;
 				}
 			}
+
 			return yield* HttpClientRequest[method](actualUrl).pipe(
 				expand
 					? HttpClientRequest.setHeader("Expand", expand.join(","))
 					: r => r,
-				method !== "get" && body !== undefined
-					? HttpClientRequest.bodyJson(body)
+				method !== "get" && actualBody !== undefined
+					? HttpClientRequest.bodyJson(actualBody)
 					: r => Effect.succeed(r),
-
 				Effect.orDie,
 				Effect.flatMap((yield* HttpClient.HttpClient).execute),
 				Effect.andThen(res => res.json),
@@ -167,6 +184,7 @@ export const routeWithResponse =
 				Effect.withSpanScoped(name),
 			);
 		}).pipe(Effect.scoped, Effect.provide(client));
+
 /** @internal */
 export const routeGet =
 	<ResType>(
@@ -212,6 +230,7 @@ export const routeWithResponseAndParam =
 		client: Layer.Layer<HttpClient.HttpClient>,
 		unexpandedResponseSchema: Schema.Schema<ResType, any, never>,
 		name = `${method} ${url}`,
+		requestSchema?: Schema.Schema<Req, any, never>,
 	) =>
 	<Expand extends GenerateExpandPaths<ResType>[] = []>(
 		r: Param,
@@ -224,6 +243,7 @@ export const routeWithResponseAndParam =
 			client,
 			unexpandedResponseSchema,
 			name,
+			requestSchema,
 		)(body, expand);
 
 /** @internal */
@@ -233,6 +253,7 @@ export const routeWithoutResponseWithParam =
 		url: (r: Param) => string,
 		client: Layer.Layer<HttpClient.HttpClient>,
 		name = `${method} ${url}`,
+		requestSchema?: Schema.Schema<T, any, never>,
 	) =>
 	(r: Param, body?: T) =>
-		routeWithoutResponse<T>(method, url(r), client, name)(body);
+		routeWithoutResponse<T>(method, url(r), client, name, requestSchema)(body);

@@ -5,11 +5,10 @@ import {
 } from "../httpClient";
 import {
 	GetUserByEmailResponseSchema,
-	type GetUserResponse,
 	GetUserResponseSchema,
 } from "../models/user";
 
-export const getUser = route<GetUserResponse>({
+export const getUser = route({
 	method: "get",
 	url: "/api/v1/users/self",
 	client: AuthenticatedApiClient,

@@ -1,13 +1,11 @@
 import { WorkspaceApiClient, route } from "../httpClient";
 import * as models from "../models/invoices";
 
-export const listInvoices = route<
-	models.InvoiceListOptionsType,
-	models.InvoiceListResult
->({
+export const listInvoices = route({
 	method: "get",
 	url: "/api/v1/invoices",
 	client: WorkspaceApiClient,
+	requestSchema: models.InvoiceListOptions,
 	responseSchema: models.InvoiceListResultSchema,
 	allowBody: true,
 });

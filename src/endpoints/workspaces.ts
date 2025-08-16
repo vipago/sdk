@@ -7,10 +7,9 @@ import {
 } from "../httpClient";
 import type { GetUserResponse } from "../models/user";
 import {
-	type AddOrUpdateMemberRequest,
+	AddOrUpdateMemberRequestSchema,
 	type CreateWorkspaceRequest,
-	type EditWorkspaceRequest,
-	type GetMemberResponse,
+	EditWorkspaceRequestSchema,
 	GetMemberResponseSchema,
 	type GetWorkspaceResponse,
 	GetWorkspaceResponseSchema,
@@ -27,39 +26,36 @@ export const createWorkspace = route<
 	responseSchema: GetWorkspaceResponseSchema,
 });
 
-export const editWorkspace = route<EditWorkspaceRequest, GetWorkspaceResponse>({
+export const editWorkspace = route({
 	method: "patch",
 	url: "/api/v1/workspaces",
 	client: WorkspaceApiClient,
+	requestSchema: EditWorkspaceRequestSchema,
 	responseSchema: GetWorkspaceResponseSchema,
 	name: "edit workspace request",
 });
 
-export const getSelfWorkspace = route<GetWorkspaceResponse>({
+export const getSelfWorkspace = route({
 	method: "get",
 	url: "/api/v1/workspaces/self",
 	client: WorkspaceApiClient,
 	responseSchema: GetWorkspaceResponseSchema,
 });
 
-export const listWorkspaces = route<
-	readonly (typeof GetWorkspaceResponseSchema.Type)[]
->({
+export const listWorkspaces = route({
 	method: "get",
 	url: "/api/v1/workspaces",
 	client: WorkspaceApiClient,
 	responseSchema: Schema.Array(GetWorkspaceResponseSchema),
 });
 
-export const putWorkspaceMember = (
-	id: GetUserResponse["id"],
-	features: WorkspaceFeatures.Feature[],
-) =>
-	route<AddOrUpdateMemberRequest>({
-		method: "put",
-		url: `/api/v1/workspaces/members/${encodeURIComponent(id)}`,
-		client: WorkspaceApiClient,
-	})({ features });
+export const putWorkspaceMember = route({
+	method: "put",
+	url: (id: GetUserResponse["id"]) =>
+		`/api/v1/workspaces/members/${encodeURIComponent(id)}`,
+	client: WorkspaceApiClient,
+	requestSchema: AddOrUpdateMemberRequestSchema,
+});
 
 export const deleteWorkspaceMember = route<GetUserResponse["id"]>({
 	method: "del",
@@ -67,18 +63,17 @@ export const deleteWorkspaceMember = route<GetUserResponse["id"]>({
 	client: WorkspaceApiClient,
 });
 
-export const listWorkspaceMembers = route<
-	typeof ListMembersResponseSchema.Type
->({
+export const listWorkspaceMembers = route({
 	method: "get",
 	url: "/api/v1/workspaces/members",
 	client: WorkspaceApiClient,
 	responseSchema: ListMembersResponseSchema,
 });
 
-export const getWorkspaceMember = route<GetMemberResponse, `us_${string}`>({
+export const getWorkspaceMember = route({
 	method: "get",
-	url: userId => `/api/v1/workspaces/members/${encodeURIComponent(userId)}`,
+	url: (userId: `us_${string}`) =>
+		`/api/v1/workspaces/members/${encodeURIComponent(userId)}`,
 	client: WorkspaceApiClient,
 	responseSchema: GetMemberResponseSchema,
 });

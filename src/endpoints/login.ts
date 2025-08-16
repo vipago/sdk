@@ -1,14 +1,14 @@
 import { UnauthenticatedApiClient, route } from "../httpClient";
 import {
-	type PasswordLoginRequest,
-	type PasswordLoginResponse,
+	PasswordLoginRequestSchema,
 	PasswordLoginResponseSchema,
 } from "../models/session";
 
-export const login = route<PasswordLoginRequest, PasswordLoginResponse>({
+export const login = route({
 	method: "post",
 	url: "/api/v1/session",
 	client: UnauthenticatedApiClient,
+	requestSchema: PasswordLoginRequestSchema,
 	responseSchema: PasswordLoginResponseSchema,
 	name: "login request",
 });

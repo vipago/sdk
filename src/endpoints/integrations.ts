@@ -1,11 +1,11 @@
 import { Schema } from "effect";
 import { WorkspaceApiClient, route } from "../httpClient";
 import {
-	type CreateIntegrationRequest,
-	type EditIntegrationRequest,
-	type GetIntegrationResponse,
+	CreateIntegrationRequestSchema,
+	EditIntegrationRequestSchema,
 	GetIntegrationResponseSchema,
 	ListIntegrationsResponseSchema,
+	type GetIntegrationResponse,
 } from "../models/integrations";
 
 export const listIntegrations = route({
@@ -15,23 +15,19 @@ export const listIntegrations = route({
 	responseSchema: ListIntegrationsResponseSchema,
 });
 
-export const createIntegration = route<
-	CreateIntegrationRequest,
-	GetIntegrationResponse
->({
+export const createIntegration = route({
 	method: "post",
 	url: "/api/v1/integrations",
 	client: WorkspaceApiClient,
+	requestSchema: CreateIntegrationRequestSchema,
 	responseSchema: GetIntegrationResponseSchema,
 });
 
-export const editIntegration = route<
-	EditIntegrationRequest,
-	GetIntegrationResponse
->({
+export const editIntegration = route({
 	method: "patch",
 	url: "/api/v1/integrations",
 	client: WorkspaceApiClient,
+	requestSchema: EditIntegrationRequestSchema,
 	responseSchema: GetIntegrationResponseSchema,
 });
 
