@@ -2,6 +2,7 @@ import { Schema } from "effect";
 import { idSchema } from "../idGenerator";
 import { Email } from "./emailValidator";
 import { GetWorkspaceResponseSchema } from "./workspace";
+import { SortingStateSchema } from "./sorting";
 
 export const GetCustomerResponseSchema = Schema.Struct({
 	id: idSchema("cust", "customer"),
@@ -33,8 +34,9 @@ export const ListCustomersQuerySchema = Schema.Struct({
 	),
 	email: Schema.NonEmptyString,
 	name: Schema.NonEmptyString,
+	sorting: Schema.parseJson(SortingStateSchema),
 }).pipe(Schema.partial);
-
+export type ListCustomersQuery = typeof ListCustomersQuerySchema.Type;
 export const ListCustomersResponseSchema = Schema.Struct({
 	items: GetCustomerResponseSchema.pipe(Schema.Array),
 	totalPages: Schema.Number,
