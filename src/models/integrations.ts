@@ -95,6 +95,8 @@ export const GetIntegrationResponseSchema = Schema.Struct({
 		description: "Detalhes da integração",
 	}),
 	state: IntegrationState.IntegrationState,
+	webhookId: Schema.String,
+	webhookSecret: Schema.String,
 });
 
 export type GetIntegrationResponse = typeof GetIntegrationResponseSchema.Type;
