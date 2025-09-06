@@ -4,10 +4,16 @@ import { GetCustomerResponseSchema } from "./customer";
 import { GetPaymentMethodResponseSchema } from "./paymentMethods";
 import { CurrencyCodeSchema } from "./products/prices";
 
-export const InvoiceDetailsSchema = Schema.Struct({
-	price: idSchema("price"),
-	quantity: Schema.Int,
-});
+export const InvoiceDetailsSchema = Schema.Union(
+	Schema.TaggedStruct("NormalItem", {
+		price: idSchema("price"),
+		quantity: Schema.Int,
+	}),
+	Schema.TaggedStruct("RecurringWithTrack", {
+		plan: Schema.String,
+		trackId: idSchema("track"),
+	}),
+);
 export const InvoiceStatusSchema = Schema.Literal(
 	"pending",
 	"expired",
