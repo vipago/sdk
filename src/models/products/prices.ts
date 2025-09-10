@@ -3,6 +3,7 @@ import type { CurrencyCode } from "currency-codes-ts/dist/types";
 import { Duration, Schema } from "effect";
 import { idSchema } from "../../idGenerator";
 import { GetProductResponseSchema } from "./products";
+import { DateMaybeFromString } from "../DateMaybeFromString";
 export namespace BillingMode {
 	const Recurring = Schema.TaggedStruct("recurring", {
 		recurringInterval: Schema.DurationFromMillis,
@@ -67,8 +68,8 @@ export const GetPriceResponseSchema = Schema.Struct({
 	billingMode: BillingMode.BillingMode,
 	currencyToPrice: CurrencyToPricesMap,
 	defaultCurrency: CurrencyCodeSchema,
-	createdAt: Schema.DateFromString,
-	updatedAt: Schema.DateFromString,
+	createdAt: DateMaybeFromString,
+	updatedAt: DateMaybeFromString,
 });
 
 export type GetPriceResponse = typeof GetPriceResponseSchema.Type;

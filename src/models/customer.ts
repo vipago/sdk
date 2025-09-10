@@ -3,6 +3,7 @@ import { idSchema } from "../idGenerator";
 import { Email } from "./emailValidator";
 import { SortingStateSchema } from "./sorting";
 import { GetWorkspaceResponseSchema } from "./workspace";
+import { DateMaybeFromString } from "./DateMaybeFromString";
 
 export const GetCustomerResponseSchema = Schema.Struct({
 	id: idSchema("cust", "customer"),
@@ -16,8 +17,8 @@ export const GetCustomerResponseSchema = Schema.Struct({
 	externalId: Schema.NonEmptyString.pipe(
 		Schema.optionalWith({ nullable: true }),
 	),
-	createdAt: Schema.DateFromString,
-	updatedAt: Schema.DateFromString,
+	createdAt: DateMaybeFromString,
+	updatedAt: DateMaybeFromString,
 }).annotations({
 	title: "Customer",
 });

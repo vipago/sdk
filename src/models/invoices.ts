@@ -3,6 +3,7 @@ import { idSchema } from "../idGenerator";
 import { GetCustomerResponseSchema } from "./customer";
 import { GetPaymentMethodResponseSchema } from "./paymentMethods";
 import { CurrencyCodeSchema } from "./products/prices";
+import { DateMaybeFromString } from "./DateMaybeFromString";
 
 export const InvoiceDetailsSchema = Schema.Union(
 	Schema.TaggedStruct("NormalItem", {
@@ -32,9 +33,9 @@ export const GetInvoiceResponseSchema = Schema.Struct({
 		GetPaymentMethodResponseSchema,
 	).pipe(Schema.optionalWith({ nullable: true })),
 	customerId: Schema.Union(idSchema("cust"), GetCustomerResponseSchema),
-	expiresAt: Schema.optional(Schema.DateFromString),
-	createdAt: Schema.optional(Schema.DateFromString),
-	updatedAt: Schema.optional(Schema.DateFromString),
+	expiresAt: Schema.optional(DateMaybeFromString),
+	createdAt: Schema.optional(DateMaybeFromString),
+	updatedAt: Schema.optional(DateMaybeFromString),
 });
 
 export const CreateInvoiceRequestSchema = Schema.Struct({
@@ -49,7 +50,7 @@ export const CreateInvoiceRequestSchema = Schema.Struct({
 	currency: CurrencyCodeSchema,
 	paymentMethodId: idSchema("pm").pipe(Schema.optional),
 	customerId: idSchema("cust"),
-	expiresAt: Schema.optional(Schema.DateFromString),
+	expiresAt: Schema.optional(DateMaybeFromString),
 	description: Schema.optional(Schema.NonEmptyString),
 	details: InvoiceDetailsSchema.pipe(Schema.Array, Schema.optional),
 	tryCollectingPaymentImmediately: Schema.Boolean.pipe(

@@ -2,6 +2,7 @@ import { Schema } from "effect";
 import { WorkspaceFeatures } from "../features";
 import { idSchema } from "../idGenerator";
 import { GetUserResponseSchema } from "./user";
+import { DateMaybeFromString } from "./DateMaybeFromString";
 
 export const GetWorkspaceResponseSchema = Schema.Struct({
 	id: idSchema("wosp", "workspace"),
@@ -20,8 +21,8 @@ export const GetWorkspaceResponseSchema = Schema.Struct({
 			"Essa chave pode ser usada como chave de API da vipago. Como já é associada a uma workspace, não precisa do header `X-Use-Workspace` quando essa chave é utilizada.",
 	}),
 	logoUrl: Schema.optional(Schema.String),
-	createdAt: Schema.DateFromString,
-	updatedAt: Schema.DateFromString,
+	createdAt: DateMaybeFromString,
+	updatedAt: DateMaybeFromString,
 }).annotations({
 	description: "Workspace",
 	title: "Workspace",
@@ -55,8 +56,8 @@ export const GetMemberResponseSchema = Schema.Struct({
 		title: "ID da workspace (Expandivel)",
 	}),
 	features: Schema.Array(WorkspaceFeatures.VALIDATOR),
-	createdAt: Schema.DateFromString,
-	updatedAt: Schema.DateFromString,
+	createdAt: DateMaybeFromString,
+	updatedAt: DateMaybeFromString,
 }).annotations({
 	title: "Workspace Membership",
 });

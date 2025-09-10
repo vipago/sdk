@@ -10,6 +10,7 @@ export * from "./endpoints/integrations";
 export * from "./endpoints/paymentMethods";
 export * from "./endpoints/settings";
 // -------------------- Models --------------------
+export * from "./models/DateMaybeFromString";
 export * from "./models/workspace";
 export * from "./models/session";
 export * from "./models/user";
