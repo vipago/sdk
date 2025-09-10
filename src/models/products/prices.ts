@@ -74,7 +74,6 @@ export const GetPriceResponseSchema = Schema.Struct({
 export type GetPriceResponse = typeof GetPriceResponseSchema.Type;
 
 export const CreatePriceRequestSchema = Schema.Struct({
-	productId: idSchema("prod", "produto"),
 	billingMode: BillingMode.BillingMode,
 	currencyToPrice: CurrencyToPricesMap,
 	defaultCurrency: CurrencyCodeSchema,
