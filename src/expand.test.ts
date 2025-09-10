@@ -1,4 +1,4 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test } from "vitest";
 import { convertExpandPathToPointers } from "./expand";
 describe("convertExpandPathToPointers", () => {
 	test("should convert expand paths to json pointers correctly", () => {
