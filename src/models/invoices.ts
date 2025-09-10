@@ -28,10 +28,7 @@ export const GetInvoiceResponseSchema = Schema.Struct({
 	amount: Schema.BigDecimal,
 	currency: CurrencyCodeSchema,
 	status: InvoiceStatusSchema,
-	paymentMethodId: Schema.Union(
-		idSchema("pm"),
-		GetPaymentMethodResponseSchema,
-	).pipe(Schema.optionalWith({ nullable: true })),
+	paymentMethodId: Schema.String.pipe(Schema.optionalWith({ nullable: true })),
 	customerId: Schema.Union(idSchema("cust"), GetCustomerResponseSchema),
 	expiresAt: Schema.optional(DateMaybeFromString),
 	createdAt: Schema.optional(DateMaybeFromString),
@@ -66,7 +63,7 @@ export const CreateInvoiceRequestSchema = Schema.Struct({
 });
 
 export const PayInvoiceRequestSchema = Schema.Struct({
-	paymentMethodId: idSchema("pm").pipe(Schema.optional),
+	paymentMethodId: Schema.String.pipe(Schema.optional),
 });
 export const PayInvoiceResponseSchema = Schema.Union(
 	Schema.Struct({
