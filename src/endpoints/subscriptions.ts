@@ -6,7 +6,7 @@ import {
 	ListSubscriptionQuerySchema,
 } from "../models/subscriptions";
 
-export const listSubscription = route({
+export const listSubscriptions = route({
 	method: "get",
 	url: "/api/v1/subscriptions",
 	client: WorkspaceApiClient,

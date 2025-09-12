@@ -58,7 +58,7 @@ const TrackPartOnRequestOptional = Schema.Union(
 );
 export const ListSubscriptionQuerySchema = pipe(
 	Schema.Struct({
-		customerId: idSchema("cus"),
+		customerId: idSchema("cust"),
 		priceId: idSchema("price"),
 	}),
 	Schema.partial,
