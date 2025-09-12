@@ -5,7 +5,7 @@ import { GetPaymentMethodResponseSchema } from "./paymentMethods";
 import { CurrencyCodeSchema } from "./products/prices";
 import { DateMaybeFromString } from "./DateMaybeFromString";
 
-export const InvoiceDetailsSchema = Schema.Union(
+export const OutInvoiceDetailsSchema = Schema.Union(
 	Schema.TaggedStruct("NormalItem", {
 		price: idSchema("price"),
 		quantity: Schema.Int,
@@ -14,6 +14,20 @@ export const InvoiceDetailsSchema = Schema.Union(
 		plan: Schema.String,
 		trackId: idSchema("track"),
 	}),
+);
+export const InInvoiceDetailsSchema = Schema.Struct({
+	price: idSchema("price"),
+	quantity: Schema.Int,
+}).pipe(
+	Schema.extend(
+		Schema.Union(
+			Schema.Struct({
+				plan: Schema.String,
+				trackId: idSchema("track"),
+			}),
+			Schema.Struct({}),
+		),
+	),
 );
 export const InvoiceStatusSchema = Schema.Literal(
 	"pending",
@@ -33,6 +47,7 @@ export const GetInvoiceResponseSchema = Schema.Struct({
 	expiresAt: Schema.optional(DateMaybeFromString),
 	createdAt: Schema.optional(DateMaybeFromString),
 	updatedAt: Schema.optional(DateMaybeFromString),
+	details: Schema.Array(InInvoiceDetailsSchema),
 });
 
 export const CreateInvoiceRequestSchema = Schema.Struct({
@@ -49,7 +64,7 @@ export const CreateInvoiceRequestSchema = Schema.Struct({
 	customerId: idSchema("cust"),
 	expiresAt: Schema.optional(DateMaybeFromString),
 	description: Schema.optional(Schema.NonEmptyString),
-	details: InvoiceDetailsSchema.pipe(Schema.Array, Schema.optional),
+	details: OutInvoiceDetailsSchema.pipe(Schema.Array, Schema.optional),
 	tryCollectingPaymentImmediately: Schema.Boolean.pipe(
 		Schema.annotations({
 			description:
@@ -119,7 +134,7 @@ export const InvoiceListOptions = Schema.Struct({
 });
 
 const e = Schema.asSchema(InvoiceListOptions);
-export type InvoiceDetails = typeof InvoiceDetailsSchema.Type;
+export type InvoiceDetails = typeof OutInvoiceDetailsSchema.Type;
 export type InvoiceStatus = typeof InvoiceStatusSchema.Type;
 export type GetInvoiceResponse = typeof GetInvoiceResponseSchema.Type;
 export type CreateInvoiceRequest = typeof CreateInvoiceRequestSchema.Type;
