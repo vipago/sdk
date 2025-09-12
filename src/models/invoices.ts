@@ -115,7 +115,10 @@ export const InvoiceListOptions = Schema.Struct({
 		}),
 		Schema.optional,
 	),
+	subscriptionId: idSchema("sub").pipe(Schema.optional),
 });
+
+const e = Schema.asSchema(InvoiceListOptions);
 export type InvoiceDetails = typeof InvoiceDetailsSchema.Type;
 export type InvoiceStatus = typeof InvoiceStatusSchema.Type;
 export type GetInvoiceResponse = typeof GetInvoiceResponseSchema.Type;

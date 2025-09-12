@@ -17,23 +17,24 @@ export const getInvoice = route({
 	responseSchema: models.GetInvoiceResponseSchema,
 });
 
-export const createInvoice = route<
-	models.CreateInvoiceRequest,
-	models.GetInvoiceResponse
->({
+export const createInvoice = route({
 	method: "post",
 	url: "/api/v1/invoices",
 	client: WorkspaceApiClient,
+	requestSchema: models.CreateInvoiceRequestSchema,
 	responseSchema: models.GetInvoiceResponseSchema,
 });
 
-export const payInvoice = route<
-	models.PayInvoiceRequest,
-	models.PayInvoiceResponse,
-	`inv_${string}`
->({
+export const payInvoice = route({
 	method: "post",
-	url: invoiceId => `/api/v1/invoices/${invoiceId}/pay`,
+	url: (invoiceId: `inv_${string}`) => `/api/v1/invoices/${invoiceId}/pay`,
 	client: WorkspaceApiClient,
+	requestSchema: models.PayInvoiceRequestSchema,
 	responseSchema: models.PayInvoiceResponseSchema,
+});
+
+export const cancelInvoice = route({
+	method: "del",
+	url: (invoiceId: `inv_${string}`) => `/api/v1/invoices/${invoiceId}`,
+	client: WorkspaceApiClient,
 });

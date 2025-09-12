@@ -3,17 +3,26 @@ import type * as tf from "type-fest";
 import { GetProductResponseSchema } from "./models/products/products";
 import { GetUserResponseSchema } from "./models/user";
 import { GetWorkspaceResponseSchema } from "./models/workspace";
+import { GetCustomerResponseSchema } from "./models/customer";
+import { GetInvoiceResponseSchema } from "./models/invoices";
+import { GetPaymentMethodResponseSchema } from "./models/paymentMethods";
+import { GetIntegrationResponseSchema } from "./models/integrations";
+import { GetPriceResponseSchema } from "./models/products/prices";
 
 export const PrefixSchemaMap = {
 	us: GetUserResponseSchema,
 	wosp: GetWorkspaceResponseSchema,
 	prod: GetProductResponseSchema,
+	cust: GetCustomerResponseSchema,
+	inv: GetInvoiceResponseSchema,
+	pm: GetPaymentMethodResponseSchema,
+	intgr: GetIntegrationResponseSchema,
+	price: GetPriceResponseSchema,
 };
 export type PrefixMap = tf.SimplifyDeep<{
-	us: (typeof PrefixSchemaMap)["us"]["Type"];
-	wosp: (typeof PrefixSchemaMap)["wosp"]["Type"];
-	prod: (typeof PrefixSchemaMap)["prod"]["Type"];
+	[K in keyof typeof PrefixSchemaMap]: (typeof PrefixSchemaMap)[K]["Type"];
 }>;
+
 type UnionToIntersection<U> = (U extends any ? (k: U) => void : never) extends (
 	k: infer I,
 ) => void
@@ -106,9 +115,9 @@ type ____ = ExpandAll<PrefixMap["prod"][], never>;
 type _____ = ExpandAll<{ prod: PrefixMap["prod"] }, "prod.workspaceId">;
 type ______ = ExpandAll<{ prod: PrefixMap["prod"]["workspaceId"][] }, "prod">;
 type _______ = GenerateExpandPaths<{
-	prod: PrefixMap["prod"]["workspaceId"][];
+	wosp: PrefixMap["prod"]["workspaceId"][];
 }>;
-type ________ = KeyMatchesExpand<"prod", _______>;
+type ________ = KeyMatchesExpand<"wosp", _______>;
 
 // Validators
 

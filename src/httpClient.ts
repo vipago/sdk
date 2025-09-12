@@ -20,11 +20,51 @@ export const WorkspaceApiClient = Layer.effect(
 	HttpClient.HttpClient,
 	internal.workspaceApiClientEffect.pipe(Effect.provide(FetchHttpClient.layer)),
 );
+type StringMap = { [key: string]: string | undefined };
+type A<T extends StringMap> = T;
+type MyParams = {
+	readonly page: string;
+	readonly itemsPerPage: string;
+	readonly customerId?: string;
+	readonly workspaceId?: string;
+	readonly externalCustomerId?: string;
+};
 
+type B = A<MyParams>;
 /**
  * Interface for the route function with overloads for different API endpoint patterns.
  */
 export interface RouteFunction {
+	/**
+	 * Creates a route with a static URL and response schema for GET requests (with body)
+	 * @example route<SomeKindOfOptions, User[]>({ method: "get", url: "/api/users", responseSchema: UserSchema, client: AuthenticatedApiClient, allowBody: true })
+	 */
+	<Req, ResType, ReqEncoded extends StringMap>(options: {
+		method: "get";
+		url: string;
+		client: Layer.Layer<HttpClient.HttpClient>;
+		requestSchema?: Schema.Schema<Req, ReqEncoded, never>;
+		responseSchema: Schema.Schema<ResType, any, never>;
+		name?: string;
+		allowBody: true;
+	}): ReturnType<typeof internal.routeWithResponse<Req, ResType>>;
+
+	/**
+	 * Creates a route with a parameterized URL and response schema for GET requests (with body)
+	 * @example route<RequestBody, User[], string>({ method: "get", url: id => `/api/users/${id}`, responseSchema: UserSchema, client: AuthenticatedApiClient, allowBody: true })
+	 */
+	<Req, ReqEncoded extends StringMap, ResType, Param = string>(options: {
+		method: "get";
+		url: (params: Param) => string;
+		client: Layer.Layer<HttpClient.HttpClient>;
+		requestSchema?: Schema.Schema<Req, ReqEncoded, never>;
+		responseSchema: Schema.Schema<ResType, any, never>;
+		name?: string;
+		allowBody: true;
+	}): ReturnType<
+		typeof internal.routeWithResponseAndParam<Req, ResType, Param>
+	>;
+
 	/**
 	 * Creates a route with a static URL and response schema for GET requests (without body)
 	 * @example route<User>({ method: "get", url: "/api/users", responseSchema: UserSchema, client: AuthenticatedApiClient })
@@ -37,20 +77,6 @@ export interface RouteFunction {
 		name?: string;
 		allowBody?: false | undefined;
 	}): ReturnType<typeof internal.routeGet<ResType>>;
-
-	/**
-	 * Creates a route with a static URL and response schema for GET requests (with body)
-	 * @example route<SomeKindOfOptions, User[]>({ method: "get", url: "/api/users", responseSchema: UserSchema, client: AuthenticatedApiClient, allowBody: true })
-	 */
-	<Req, ResType>(options: {
-		method: "get";
-		url: string;
-		client: Layer.Layer<HttpClient.HttpClient>;
-		requestSchema?: Schema.Schema<Req, any, never>;
-		responseSchema: Schema.Schema<ResType, any, never>;
-		name?: string;
-		allowBody: true;
-	}): ReturnType<typeof internal.routeWithResponse<Req, ResType>>;
 	/**
 	 * Creates a route with a parameterized URL and response schema for GET requests (without body)
 	 * @example route<User[]>({ method: "get", url: id => `/api/users/${id}`, responseSchema: UserSchema, client: AuthenticatedApiClient })
@@ -63,22 +89,6 @@ export interface RouteFunction {
 		name?: string;
 		allowBody?: false | undefined;
 	}): ReturnType<typeof internal.routeGetWithParam<ResType, Param>>;
-
-	/**
-	 * Creates a route with a parameterized URL and response schema for GET requests (with body)
-	 * @example route<RequestBody, User[], string>({ method: "get", url: id => `/api/users/${id}`, responseSchema: UserSchema, client: AuthenticatedApiClient, allowBody: true })
-	 */
-	<Req, ResType, Param = string>(options: {
-		method: "get";
-		url: (params: Param) => string;
-		client: Layer.Layer<HttpClient.HttpClient>;
-		requestSchema?: Schema.Schema<Req, any, never>;
-		responseSchema: Schema.Schema<ResType, any, never>;
-		name?: string;
-		allowBody: true;
-	}): ReturnType<
-		typeof internal.routeWithResponseAndParam<Req, ResType, Param>
-	>;
 
 	/**
 	 * Creates a route with a static URL and no response schema
