@@ -22,11 +22,11 @@ export const ListProductsResponseSchema = Schema.Struct({
 
 export type ListProductsResponse = typeof ListProductsResponseSchema.Type;
 export const ListProductsRequestSchema = Schema.Struct({
-	page: Schema.Number.pipe(
+	page: Schema.NumberFromString.pipe(
 		Schema.propertySignature,
 		Schema.withConstructorDefault(() => 0),
 	),
-	itemsPerPage: Schema.Number.pipe(
+	itemsPerPage: Schema.NumberFromString.pipe(
 		Schema.propertySignature,
 		Schema.withConstructorDefault(() => 30),
 	),
