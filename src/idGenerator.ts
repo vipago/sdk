@@ -36,7 +36,7 @@ export function idSchema<Prefix extends string>(
 			Schema.annotations({
 				examples: [generateRandomId(prefix, size) as string],
 				description: "",
-				title: resourceName ? `Id de um(a) ${resourceName}` : undefined,
+				...(resourceName ? { title: `Id de um(a) ${resourceName}` } : {}),
 			}),
 		),
 	) as Schema.Schema<`${Prefix}_${string}`>;
