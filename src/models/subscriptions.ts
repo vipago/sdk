@@ -67,9 +67,10 @@ export const ListSubscriptionQuerySchema = pipe(
 
 export const EditSubscriptionRequestSchema = pipe(
 	Schema.Struct({
-		status: Schema.Literal("cancel", "active").pipe(Schema.optional),
+		status: Schema.Literal("cancel", "active"),
 		resetAnchor: Schema.Union(Schema.Literal("now"), DateMaybeFromString),
 	}),
+	Schema.partial,
 	Schema.extend(
 		Schema.Union(
 			TrackPartOnRequest,
