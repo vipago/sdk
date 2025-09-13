@@ -10,7 +10,6 @@ import { expand } from "..";
 export const SubscriptionStatusSchema = Schema.Literal(
 	"active",
 	"zombie",
-	"paused",
 	"expired",
 );
 const TrackPart = Schema.Union(
