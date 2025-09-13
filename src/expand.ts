@@ -58,10 +58,20 @@ export type GenerateExpandPaths<T, Path extends string = ""> = (
 						T[K]
 					> extends readonly (infer ArrayElement)[]
 						? IsExpandableUnion<ArrayElement> extends true
-							? `${Path}${K & string}`
+							?
+									| `${Path}${K & string}`
+									| GenerateExpandPaths<
+											NonNullable<Exclude<ArrayElement, string>>,
+											`${Path}${K & string}.`
+									  >
 							: GenerateExpandPaths<ArrayElement, `${Path}${K & string}.`>
 						: IsExpandableUnion<NonNullable<T[K]>> extends true
-							? `${Path}${K & string}`
+							?
+									| `${Path}${K & string}`
+									| GenerateExpandPaths<
+											NonNullable<Exclude<T[K], string>>,
+											`${Path}${K & string}.`
+									  >
 							: GenerateExpandPaths<NonNullable<T[K]>, `${Path}${K & string}.`>;
 				}[keyof T]
 			: never
@@ -103,7 +113,13 @@ T extends ReadonlyArray<infer U extends object>
 								>
 							: ExpandRemaindersFor<K, E> extends never
 								? Extract<T[K], string>
-								: Exclude<T[K], string>
+								: ExpandAll<
+										Exclude<T[K], string>,
+										Extract<
+											ExpandRemaindersFor<K, E>,
+											GenerateExpandPaths<Exclude<T[K], string>>
+										>
+									>
 					: never;
 			}
 		>;
@@ -113,7 +129,10 @@ type __ = ExpandAll<PrefixMap["prod"], "workspaceId">;
 type ___ = GenerateExpandPaths<PrefixMap["prod"][]>;
 type ____ = ExpandAll<PrefixMap["prod"][], never>;
 type _____ = ExpandAll<{ prod: PrefixMap["prod"] }, "prod.workspaceId">;
-type ______ = ExpandAll<{ prod: PrefixMap["prod"]["workspaceId"][] }, "prod">;
+type ______ = ExpandAll<
+	{ prod: PrefixMap["prod"] | "prod_ee" },
+	"prod.workspaceId.ownerId"
+>;
 type _______ = GenerateExpandPaths<{
 	wosp: PrefixMap["prod"]["workspaceId"][];
 }>;
