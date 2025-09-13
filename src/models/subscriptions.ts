@@ -34,6 +34,7 @@ export const GetSubscriptionResponseSchema = pipe(
 		paymentMethodId: Schema.String,
 		createdAt: DateMaybeFromString,
 		updatedAt: DateMaybeFromString,
+		status: SubscriptionStatusSchema,
 	}),
 	Schema.extend(TrackPart),
 );
