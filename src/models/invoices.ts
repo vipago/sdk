@@ -1,29 +1,31 @@
 import { BigDecimal, Schema } from "effect";
 import { idSchema } from "../idGenerator";
-import { GetCustomerResponseSchema } from "./customer";
-import { GetPaymentMethodResponseSchema } from "./paymentMethods";
-import { CurrencyCodeSchema } from "./products/prices";
+import { CustomerId, ExpandableCustomerId } from "./customer";
+import { CurrencyCodeSchema, PriceId } from "./products/prices";
 import { DateMaybeFromString } from "./DateMaybeFromString";
-
+import { PaymentMethodId } from "./paymentMethods";
+import { WorkspaceId } from "./workspace";
+import { SubscriptionId } from "./subscriptions";
+import { TrackId } from "./tracks";
 export const OutInvoiceDetailsSchema = Schema.Union(
 	Schema.TaggedStruct("NormalItem", {
-		price: idSchema("price"),
+		price: PriceId,
 		quantity: Schema.Int,
 	}),
 	Schema.TaggedStruct("RecurringWithTrack", {
 		plan: Schema.String,
-		trackId: idSchema("track"),
+		trackId: TrackId,
 	}),
 );
 export const InInvoiceDetailsSchema = Schema.Struct({
-	price: idSchema("price"),
+	price: PriceId,
 	quantity: Schema.Int,
 }).pipe(
 	Schema.extend(
 		Schema.Union(
 			Schema.Struct({
 				plan: Schema.String,
-				trackId: idSchema("track"),
+				trackId: TrackId,
 			}),
 			Schema.Struct({}),
 		),
@@ -36,20 +38,23 @@ export const InvoiceStatusSchema = Schema.Literal(
 	"cancelled",
 	"refunded",
 );
-
+export const InvoiceId = idSchema("inv", "fatura");
 export const GetInvoiceResponseSchema = Schema.Struct({
-	id: idSchema("inv", "fatura"),
+	id: InvoiceId,
 	amount: Schema.BigDecimal,
 	currency: CurrencyCodeSchema,
 	status: InvoiceStatusSchema,
 	paymentMethodId: Schema.String.pipe(Schema.optionalWith({ nullable: true })),
-	customerId: Schema.Union(idSchema("cust"), GetCustomerResponseSchema),
+	customerId: ExpandableCustomerId,
 	expiresAt: Schema.optional(DateMaybeFromString),
 	createdAt: Schema.optional(DateMaybeFromString),
 	updatedAt: Schema.optional(DateMaybeFromString),
 	details: Schema.Array(InInvoiceDetailsSchema),
 });
-
+export const ExpandableInvoiceId = Schema.Union(
+	InvoiceId,
+	GetInvoiceResponseSchema,
+);
 export const CreateInvoiceRequestSchema = Schema.Struct({
 	amount: Schema.BigDecimal.pipe(
 		Schema.annotations({
@@ -60,8 +65,8 @@ export const CreateInvoiceRequestSchema = Schema.Struct({
 		Schema.optional,
 	),
 	currency: CurrencyCodeSchema,
-	paymentMethodId: idSchema("pm").pipe(Schema.optional),
-	customerId: idSchema("cust"),
+	paymentMethodId: PaymentMethodId.pipe(Schema.optional),
+	customerId: CustomerId,
 	expiresAt: Schema.optional(DateMaybeFromString),
 	description: Schema.optional(Schema.NonEmptyString),
 	details: OutInvoiceDetailsSchema.pipe(Schema.Array, Schema.optional),
@@ -112,13 +117,13 @@ export const InvoiceListOptions = Schema.Struct({
 		Schema.propertySignature,
 		Schema.withConstructorDefault(() => 30),
 	),
-	workspaceId: idSchema("wosp").pipe(
+	workspaceId: WorkspaceId.pipe(
 		Schema.annotations({
 			description: "Filtrar faturas por workspace ID",
 		}),
 		Schema.optional,
 	),
-	customerId: idSchema("cust").pipe(
+	customerId: CustomerId.pipe(
 		Schema.annotations({
 			description: "Filtrar faturas por ID do cliente",
 		}),
@@ -130,10 +135,9 @@ export const InvoiceListOptions = Schema.Struct({
 		}),
 		Schema.optional,
 	),
-	subscriptionId: idSchema("sub").pipe(Schema.optional),
+	subscriptionId: SubscriptionId.pipe(Schema.optional),
 });
 
-const e = Schema.asSchema(InvoiceListOptions);
 export type InvoiceDetails = typeof OutInvoiceDetailsSchema.Type;
 export type InvoiceStatus = typeof InvoiceStatusSchema.Type;
 export type GetInvoiceResponse = typeof GetInvoiceResponseSchema.Type;

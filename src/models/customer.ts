@@ -2,18 +2,15 @@ import { Schema } from "effect";
 import { idSchema } from "../idGenerator";
 import { Email } from "./emailValidator";
 import { SortingStateSchema } from "./sorting";
-import { GetWorkspaceResponseSchema } from "./workspace";
+import { ExpandableWorkspaceId } from "./workspace";
 import { DateMaybeFromString } from "./DateMaybeFromString";
-
+export const CustomerId = idSchema("cust", "cliente");
 export const GetCustomerResponseSchema = Schema.Struct({
-	id: idSchema("cust", "customer"),
+	id: CustomerId,
 	name: Schema.NonEmptyString,
 	email: Email,
 	phone: Schema.NonEmptyString.pipe(Schema.optionalWith({ nullable: true })),
-	workspaceId: Schema.Union(
-		idSchema("wosp", "workspace"),
-		GetWorkspaceResponseSchema,
-	),
+	workspaceId: ExpandableWorkspaceId,
 	externalId: Schema.NonEmptyString.pipe(
 		Schema.optionalWith({ nullable: true }),
 	),
@@ -22,6 +19,10 @@ export const GetCustomerResponseSchema = Schema.Struct({
 }).annotations({
 	title: "Customer",
 });
+export const ExpandableCustomerId = Schema.Union(
+	CustomerId,
+	GetCustomerResponseSchema,
+);
 
 export type GetCustomerResponse = typeof GetCustomerResponseSchema.Type;
 export const ListCustomersQuerySchema = Schema.Struct({

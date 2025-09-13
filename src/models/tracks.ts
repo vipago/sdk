@@ -13,9 +13,9 @@ export const GetTrackItemSchema = Schema.Struct({
 	plan: Schema.Union(indexNumberSchema, Schema.String),
 	priceId: Schema.Union(idSchema("price"), GetPriceResponseSchema),
 });
-
+export const TrackId = idSchema("track", "track");
 export const GetTrackResponseSchema = Schema.Struct({
-	id: idSchema("track"),
+	id: TrackId,
 	workspaceId: Schema.Union(idSchema("wosp"), GetWorkspaceResponseSchema),
 	name: Schema.NonEmptyString,
 	codename: Schema.String,
@@ -23,6 +23,7 @@ export const GetTrackResponseSchema = Schema.Struct({
 	createdAt: DateMaybeFromString,
 	updatedAt: DateMaybeFromString,
 });
+export const ExpandableTrackId = Schema.Union(TrackId, GetTrackResponseSchema);
 export const CreateTrackRequestSchema = Schema.Struct({
 	name: Schema.NonEmptyString,
 	codename: Schema.String,

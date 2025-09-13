@@ -2,7 +2,7 @@ import { codes as currencyCodes } from "currency-codes-ts";
 import type { CurrencyCode } from "currency-codes-ts/dist/types";
 import { Duration, Schema } from "effect";
 import { idSchema } from "../../idGenerator";
-import { GetProductResponseSchema } from "./products";
+import { ExpandableProductId } from "./products";
 import { DateMaybeFromString } from "../DateMaybeFromString";
 export namespace BillingMode {
 	const Recurring = Schema.TaggedStruct("recurring", {
@@ -58,20 +58,19 @@ const checkDefaultCurrency = (price: {
 		? "Default currency amount was not found in the currency-amounts map"
 		: undefined;
 
+export const PriceId = idSchema("price", "preço");
+
 export const GetPriceResponseSchema = Schema.Struct({
-	id: idSchema("price", "preço"),
+	id: PriceId,
 	active: Schema.Boolean,
-	productId: Schema.Union(
-		idSchema("prod", "produto"),
-		GetProductResponseSchema,
-	),
+	productId: ExpandableProductId,
 	billingMode: BillingMode.BillingMode,
 	currencyToPrice: CurrencyToPricesMap,
 	defaultCurrency: CurrencyCodeSchema,
 	createdAt: DateMaybeFromString,
 	updatedAt: DateMaybeFromString,
 });
-
+export const ExpandablePriceId = Schema.Union(PriceId, GetPriceResponseSchema);
 export type GetPriceResponse = typeof GetPriceResponseSchema.Type;
 
 export const CreatePriceRequestSchema = Schema.Struct({

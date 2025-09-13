@@ -1,18 +1,18 @@
 import { Schema } from "effect";
 import { idSchema } from "../../idGenerator";
-import { GetWorkspaceResponseSchema } from "../workspace";
-
+import { ExpandableWorkspaceId } from "../workspace";
+export const ProductId = idSchema("prod", "Produto");
 export const GetProductResponseSchema = Schema.Struct({
-	id: idSchema("prod", "Produto"),
+	id: ProductId,
 	name: Schema.NonEmptyString,
 	iconUrl: Schema.NonEmptyString.pipe(Schema.NullOr),
-	workspaceId: Schema.Union(
-		idSchema("wosp", "Workspace"),
-		GetWorkspaceResponseSchema,
-	),
+	workspaceId: ExpandableWorkspaceId,
 	active: Schema.Boolean,
 });
-
+export const ExpandableProductId = Schema.Union(
+	ProductId,
+	GetProductResponseSchema,
+);
 export type GetProductResponse = typeof GetProductResponseSchema.Type;
 
 export const ListProductsResponseSchema = Schema.Struct({

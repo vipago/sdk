@@ -1,8 +1,8 @@
 import { Schema } from "effect";
 import { idSchema } from "../idGenerator";
-import { GetCustomerResponseSchema } from "./customer";
+import { CustomerId, ExpandableCustomerId } from "./customer";
 import { CurrencyCodeSchema } from "./products/prices";
-import { GetWorkspaceResponseSchema } from "./workspace";
+import { ExpandableWorkspaceId } from "./workspace";
 
 export namespace PaymentMethod {
 	export const AvailableType = Schema.Literal("card", "paypal", "pix");
@@ -53,27 +53,26 @@ export namespace NewPaymentMethodDetails {
 	export const NewPaymentMethodDetails = Schema.Union(Card);
 	export type NewPaymentMethodDetails = typeof NewPaymentMethodDetails.Type;
 }
-// Schema for the payment method record in the database
+
+export const PaymentMethodId = idSchema("pm", "Método de Pagamento");
+
 export const GetPaymentMethodResponseSchema = Schema.Struct({
-	id: idSchema("pm", "Método de Pagamento"),
-	customerId: Schema.Union(
-		idSchema("cust", "Cliente"),
-		GetCustomerResponseSchema,
-	),
-	workspaceId: Schema.Union(
-		idSchema("wosp", "Workspace"),
-		GetWorkspaceResponseSchema,
-	),
+	id: PaymentMethodId,
+	customerId: ExpandableCustomerId,
+	workspaceId: ExpandableWorkspaceId,
 	data: PaymentMethod.PaymentMethod, // The actual payment method data (only Stripe for now)
 	deleted: Schema.Boolean,
 });
-
+export const ExpandablePaymentMethodId = Schema.Union(
+	PaymentMethodId,
+	GetPaymentMethodResponseSchema,
+);
 export type GetPaymentMethodResponse =
 	typeof GetPaymentMethodResponseSchema.Type;
 
 // Schema for creating a new payment method
 export const CreatePaymentMethodRequestSchema = Schema.Struct({
-	customerId: idSchema("cust", "Cliente"),
+	customerId: CustomerId,
 	hints: Schema.Struct({
 		paymentAmount: Schema.optional(Schema.BigDecimal),
 		currency: Schema.optional(CurrencyCodeSchema),

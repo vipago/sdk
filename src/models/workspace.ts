@@ -3,6 +3,7 @@ import { WorkspaceFeatures } from "../features";
 import { idSchema } from "../idGenerator";
 import { GetUserResponseSchema } from "./user";
 import { DateMaybeFromString } from "./DateMaybeFromString";
+export const WorkspaceId = idSchema("wosp", "workspace");
 
 export const GetWorkspaceResponseSchema = Schema.Struct({
 	id: idSchema("wosp", "workspace"),
@@ -27,7 +28,10 @@ export const GetWorkspaceResponseSchema = Schema.Struct({
 	description: "Workspace",
 	title: "Workspace",
 });
-
+export const ExpandableWorkspaceId = Schema.Union(
+	WorkspaceId,
+	GetWorkspaceResponseSchema,
+);
 export type GetWorkspaceResponse = typeof GetWorkspaceResponseSchema.Type;
 
 export const CreateWorkspaceRequestSchema = Schema.Struct({

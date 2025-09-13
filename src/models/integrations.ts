@@ -1,6 +1,6 @@
 import { Schema } from "effect";
 import { idSchema } from "../idGenerator";
-import { GetWorkspaceResponseSchema } from "./workspace";
+import { ExpandableWorkspaceId } from "./workspace";
 
 export namespace Integration {
 	export const types = ["paypal", "pix", "stripe"] as const;
@@ -81,14 +81,11 @@ export namespace IntegrationState {
 		description: "Estado da integração",
 	});
 }
-
+export const IntegrationId = idSchema("intgr", "integração");
 // Schema para a resposta de uma integração no banco de dados
 export const GetIntegrationResponseSchema = Schema.Struct({
-	id: idSchema("intgr", "Integração"),
-	workspaceId: Schema.Union(
-		idSchema("wosp", "Workspace"),
-		GetWorkspaceResponseSchema,
-	).annotations({
+	id: IntegrationId,
+	workspaceId: ExpandableWorkspaceId.annotations({
 		description: "Id da workspace da integração (Expandivel)",
 	}), // Relacionamento com o cliente
 	data: Integration.Integration.annotations({
@@ -98,7 +95,10 @@ export const GetIntegrationResponseSchema = Schema.Struct({
 	webhookId: Schema.String,
 	webhookSecret: Schema.String,
 });
-
+export const ExpandableIntegrationId = Schema.Union(
+	IntegrationId,
+	GetIntegrationResponseSchema,
+);
 export type GetIntegrationResponse = typeof GetIntegrationResponseSchema.Type;
 
 // Schema para criar uma nova integração

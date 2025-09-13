@@ -1,11 +1,11 @@
 import { pipe, Schema } from "effect";
 import { idSchema } from "../idGenerator";
-import { GetWorkspaceResponseSchema } from "./workspace";
-import { GetCustomerResponseSchema } from "./customer";
-import { GetTrackItemSchema, GetTrackResponseSchema } from "./tracks";
-import { GetPriceResponseSchema } from "./products/prices";
+import { ExpandableWorkspaceId } from "./workspace";
+import { CustomerId, ExpandableCustomerId } from "./customer";
+import { ExpandableTrackId, GetTrackItemSchema, TrackId } from "./tracks";
+import { ExpandablePriceId, PriceId } from "./products/prices";
 import { DateMaybeFromString } from "./DateMaybeFromString";
-import { expand, GetInvoiceResponseSchema } from "..";
+import { ExpandableInvoiceId } from "..";
 
 export const SubscriptionStatusSchema = Schema.Literal(
 	"active",
@@ -14,7 +14,7 @@ export const SubscriptionStatusSchema = Schema.Literal(
 );
 const TrackPart = Schema.Union(
 	Schema.Struct({
-		trackId: Schema.Union(idSchema("track"), GetTrackResponseSchema),
+		trackId: ExpandableTrackId,
 		plan: GetTrackItemSchema.fields.plan,
 		outdatedPlan: Schema.Boolean.annotations({
 			description:
@@ -23,12 +23,13 @@ const TrackPart = Schema.Union(
 	}),
 	Schema.Struct({}),
 );
+export const SubscriptionId = idSchema("sub", "subscrição");
 export const GetSubscriptionResponseSchema = pipe(
 	Schema.Struct({
-		id: idSchema("sub"),
-		workspaceId: Schema.Union(idSchema("wosp"), GetWorkspaceResponseSchema),
-		customerId: Schema.Union(idSchema("cust"), GetCustomerResponseSchema),
-		priceId: Schema.Union(idSchema("price"), GetPriceResponseSchema),
+		id: SubscriptionId,
+		workspaceId: ExpandableWorkspaceId,
+		customerId: ExpandableCustomerId,
+		priceId: ExpandablePriceId,
 		anchor: DateMaybeFromString,
 		paymentMethodId: Schema.String,
 		createdAt: DateMaybeFromString,
@@ -37,6 +38,10 @@ export const GetSubscriptionResponseSchema = pipe(
 	}),
 	Schema.extend(TrackPart),
 );
+export const ExpandableSubscriptionId = Schema.Union(
+	SubscriptionId,
+	GetSubscriptionResponseSchema,
+);
 const TrackPartOnRequest = pipe(
 	Schema.Struct({
 		plan: GetTrackItemSchema.fields.plan,
@@ -44,7 +49,7 @@ const TrackPartOnRequest = pipe(
 	Schema.extend(
 		Schema.Union(
 			Schema.Struct({
-				trackId: idSchema("track"),
+				trackId: TrackId,
 			}),
 			Schema.Struct({
 				trackCodeName: Schema.String,
@@ -58,8 +63,8 @@ const TrackPartOnRequestOptional = Schema.Union(
 );
 export const ListSubscriptionQuerySchema = pipe(
 	Schema.Struct({
-		customerId: idSchema("cust"),
-		priceId: idSchema("price"),
+		customerId: CustomerId,
+		priceId: PriceId,
 	}),
 	Schema.partial,
 	Schema.extend(TrackPartOnRequestOptional),
@@ -77,7 +82,7 @@ export const RequestPlanChangeRequestSchema = pipe(
 	Schema.Union(
 		TrackPartOnRequest,
 		Schema.Struct({
-			priceId: idSchema("price"),
+			priceId: PriceId,
 		}),
 	),
 	Schema.extend(
@@ -88,6 +93,6 @@ export const RequestPlanChangeRequestSchema = pipe(
 );
 
 export const RequestPlanChangeResponseSchema = Schema.Struct({
-	invoiceId: Schema.Union(idSchema("inv"), GetInvoiceResponseSchema),
+	invoiceId: Schema.suspend(() => ExpandableInvoiceId),
 	charged: Schema.Boolean,
 });

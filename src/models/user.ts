@@ -2,9 +2,9 @@ import { Schema } from "effect";
 import { UserFeatures } from "../features";
 import { idSchema } from "../idGenerator";
 import { Email } from "./emailValidator";
-
+export const UserId = idSchema("us", "usuário");
 export const GetUserResponseSchema = Schema.Struct({
-	id: idSchema("us", "user"),
+	id: UserId,
 	name: Schema.NonEmptyString,
 	email: Email.annotations({
 		description: "Email do usuário",
@@ -18,11 +18,11 @@ export const GetUserResponseSchema = Schema.Struct({
 }).annotations({
 	title: "User",
 });
-
+export const ExpandableUserId = Schema.Union(UserId, GetUserResponseSchema);
 export type GetUserResponse = typeof GetUserResponseSchema.Type;
 
 export const GetUserByEmailResponseSchema = Schema.Struct({
-	id: idSchema("us", "user"),
+	id: UserId,
 	name: Schema.NonEmptyString,
 	email: Email.annotations({
 		description: "User's email",
