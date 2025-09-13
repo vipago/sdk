@@ -4,6 +4,8 @@ import {
 	EditSubscriptionRequestSchema,
 	GetSubscriptionResponseSchema,
 	ListSubscriptionQuerySchema,
+	RequestPlanChangeRequestSchema,
+	RequestPlanChangeResponseSchema,
 } from "../models/subscriptions";
 
 export const listSubscriptions = route({
@@ -32,4 +34,12 @@ export const editSubscription = route({
 	client: WorkspaceApiClient,
 	requestSchema: EditSubscriptionRequestSchema,
 	responseSchema: GetSubscriptionResponseSchema,
+});
+export const requestSubscriptionPlanChange = route({
+	method: "patch",
+	url: (id: (typeof GetSubscriptionResponseSchema.Type)["id"]) =>
+		"/api/v1/subscriptions/" + encodeURIComponent(id) + "/plan",
+	client: WorkspaceApiClient,
+	requestSchema: RequestPlanChangeRequestSchema,
+	responseSchema: RequestPlanChangeResponseSchema,
 });

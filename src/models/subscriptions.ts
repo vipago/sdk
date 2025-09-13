@@ -5,7 +5,7 @@ import { GetCustomerResponseSchema } from "./customer";
 import { GetTrackItemSchema, GetTrackResponseSchema } from "./tracks";
 import { GetPriceResponseSchema } from "./products/prices";
 import { DateMaybeFromString } from "./DateMaybeFromString";
-import { expand } from "..";
+import { expand, GetInvoiceResponseSchema } from "..";
 
 export const SubscriptionStatusSchema = Schema.Literal(
 	"active",
@@ -71,15 +71,23 @@ export const EditSubscriptionRequestSchema = pipe(
 		resetAnchor: Schema.Union(Schema.Literal("now"), DateMaybeFromString),
 	}),
 	Schema.partial,
+);
+
+export const RequestPlanChangeRequestSchema = pipe(
+	Schema.Union(
+		TrackPartOnRequest,
+		Schema.Struct({
+			priceId: idSchema("price"),
+		}),
+	),
 	Schema.extend(
-		Schema.Union(
-			TrackPartOnRequest,
-			pipe(
-				Schema.Struct({
-					priceId: idSchema("price"),
-				}),
-			),
-			Schema.Struct({}),
-		),
+		Schema.Struct({
+			cancelInvoiceOnAutoPaymentFailure: Schema.Boolean,
+		}),
 	),
 );
+
+export const RequestPlanChangeResponseSchema = Schema.Struct({
+	invoiceId: Schema.Union(idSchema("inv"), GetInvoiceResponseSchema),
+	charged: Schema.Boolean,
+});
