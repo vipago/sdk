@@ -9,7 +9,7 @@ import { expand } from "..";
 
 export const SubscriptionStatusSchema = Schema.Literal(
 	"active",
-	"canceled",
+	"zombie",
 	"paused",
 	"expired",
 );
@@ -67,7 +67,7 @@ export const ListSubscriptionQuerySchema = pipe(
 
 export const EditSubscriptionRequestSchema = pipe(
 	Schema.Struct({
-		status: Schema.Literal("canceled", "active").pipe(Schema.optional),
+		status: Schema.Literal("cancel", "active").pipe(Schema.optional),
 		resetAnchor: Schema.Union(Schema.Literal("now"), DateMaybeFromString),
 	}),
 	Schema.extend(
