@@ -1,5 +1,5 @@
 import { Schema } from "effect";
-import { route, WorkspaceApiClient } from "../httpClient";
+import { WorkspaceApiClient, route } from "../httpClient";
 import {
 	EditSubscriptionRequestSchema,
 	GetSubscriptionResponseSchema,

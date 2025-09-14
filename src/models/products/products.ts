@@ -1,7 +1,7 @@
 import { Schema } from "effect";
 import { idSchema } from "../../idGenerator";
 import { ExpandableWorkspaceId } from "../workspace";
-export const ProductId = idSchema("prod", "Produto");
+export const ProductId = idSchema("prod", "produto");
 export const GetProductResponseSchema = Schema.Struct({
 	id: ProductId,
 	name: Schema.NonEmptyString,

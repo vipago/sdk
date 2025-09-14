@@ -1,12 +1,12 @@
 import { BigDecimal, Schema } from "effect";
 import { idSchema } from "../idGenerator";
-import { CustomerId, ExpandableCustomerId } from "./customer";
-import { CurrencyCodeSchema, PriceId } from "./products/prices";
 import { DateMaybeFromString } from "./DateMaybeFromString";
+import { CustomerId, ExpandableCustomerId } from "./customer";
 import { PaymentMethodId } from "./paymentMethods";
-import { WorkspaceId } from "./workspace";
+import { CurrencyCodeSchema, PriceId } from "./products/prices";
 import { SubscriptionId } from "./subscriptions";
 import { TrackId } from "./tracks";
+import { WorkspaceId } from "./workspace";
 export const OutInvoiceDetailsSchema = Schema.Union(
 	Schema.TaggedStruct("NormalItem", {
 		price: PriceId,

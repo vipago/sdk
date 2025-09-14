@@ -2,8 +2,8 @@ import { codes as currencyCodes } from "currency-codes-ts";
 import type { CurrencyCode } from "currency-codes-ts/dist/types";
 import { Duration, Schema } from "effect";
 import { idSchema } from "../../idGenerator";
-import { ExpandableProductId } from "./products";
 import { DateMaybeFromString } from "../DateMaybeFromString";
+import { ExpandableProductId } from "./products";
 export namespace BillingMode {
 	const Recurring = Schema.TaggedStruct("recurring", {
 		recurringInterval: Schema.DurationFromMillis,

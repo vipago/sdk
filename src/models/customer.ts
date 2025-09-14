@@ -1,9 +1,9 @@
 import { Schema } from "effect";
 import { idSchema } from "../idGenerator";
+import { DateMaybeFromString } from "./DateMaybeFromString";
 import { Email } from "./emailValidator";
 import { SortingStateSchema } from "./sorting";
 import { ExpandableWorkspaceId } from "./workspace";
-import { DateMaybeFromString } from "./DateMaybeFromString";
 export const CustomerId = idSchema("cust", "cliente");
 export const GetCustomerResponseSchema = Schema.Struct({
 	id: CustomerId,

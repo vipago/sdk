@@ -1,13 +1,13 @@
 import { Schema } from "effect";
 import type * as tf from "type-fest";
+import { GetCustomerResponseSchema } from "./models/customer";
+import { GetIntegrationResponseSchema } from "./models/integrations";
+import { GetInvoiceResponseSchema } from "./models/invoices";
+import { GetPaymentMethodResponseSchema } from "./models/paymentMethods";
+import { GetPriceResponseSchema } from "./models/products/prices";
 import { GetProductResponseSchema } from "./models/products/products";
 import { GetUserResponseSchema } from "./models/user";
 import { GetWorkspaceResponseSchema } from "./models/workspace";
-import { GetCustomerResponseSchema } from "./models/customer";
-import { GetInvoiceResponseSchema } from "./models/invoices";
-import { GetPaymentMethodResponseSchema } from "./models/paymentMethods";
-import { GetIntegrationResponseSchema } from "./models/integrations";
-import { GetPriceResponseSchema } from "./models/products/prices";
 
 export const PrefixSchemaMap = {
 	us: GetUserResponseSchema,

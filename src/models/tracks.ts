@@ -1,8 +1,8 @@
-import { pipe, Schema } from "effect";
+import { Schema, pipe } from "effect";
 import { idSchema } from "../idGenerator";
-import { GetWorkspaceResponseSchema } from "./workspace";
-import { GetPriceResponseSchema } from "./products/prices";
 import { DateMaybeFromString } from "./DateMaybeFromString";
+import { GetPriceResponseSchema } from "./products/prices";
+import { GetWorkspaceResponseSchema } from "./workspace";
 const indexNumberSchema = Schema.NumberFromString.pipe(
 	Schema.nonNaN(),
 	Schema.nonNegative(),
