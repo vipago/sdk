@@ -31,7 +31,7 @@ export const GetSubscriptionResponseSchema = pipe(
 		customerId: ExpandableCustomerId,
 		priceId: ExpandablePriceId,
 		anchor: DateMaybeFromString,
-		paymentMethodId: Schema.String,
+		paymentMethodId: Schema.String.pipe(Schema.NullOr),
 		createdAt: DateMaybeFromString,
 		updatedAt: DateMaybeFromString,
 		status: SubscriptionStatusSchema,
