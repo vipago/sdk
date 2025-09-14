@@ -64,6 +64,8 @@ export namespace WorkspaceFeatures {
 		"invoices:create",
 		"invoices:read",
 		"invoices:void",
+		"subscriptions:read",
+		"subscriptions:edit",
 	] as const);
 	export type Feature = ElementsOfSet<typeof AVAILABLE_FEATURES>;
 	export const DEFAULT_FEATURES: Set<Feature> = new Set([
@@ -97,6 +99,8 @@ export namespace WorkspaceFeatures {
 		"invoices:create",
 		"invoices:read",
 		"invoices:void",
+		"subscriptions:read",
+		"subscriptions:edit",
 	] as const);
 	export const VALIDATOR = Schema.Literal(...AVAILABLE_FEATURES).annotations({
 		title: "Permissão",
