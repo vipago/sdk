@@ -1,4 +1,4 @@
-import { BigDecimal, Schema } from "effect";
+import { BigDecimal, pipe, Schema } from "effect";
 import { idSchema } from "../idGenerator";
 import { DateMaybeFromString } from "./DateMaybeFromString";
 import { CustomerId, ExpandableCustomerId } from "./customer";
@@ -98,7 +98,7 @@ export const PayInvoiceResponseSchema = Schema.Union(
 	}),
 );
 export const InvoiceListResultSchema = Schema.Struct({
-	items: Schema.Array(GetInvoiceResponseSchema),
+	items: pipe(GetInvoiceResponseSchema, Schema.omit("details"), Schema.Array),
 	totalPages: Schema.Number,
 });
 
