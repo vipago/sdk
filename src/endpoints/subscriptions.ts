@@ -22,8 +22,7 @@ export const getSubscription = route({
 	url: (id: (typeof GetSubscriptionResponseSchema.Type)["id"]) =>
 		"/api/v1/subscriptions/" + encodeURIComponent(id),
 	client: WorkspaceApiClient,
-	allowBody: true,
-	requestSchema: ListSubscriptionQuerySchema,
+	allowBody: false,
 	responseSchema: GetSubscriptionResponseSchema,
 });
 
