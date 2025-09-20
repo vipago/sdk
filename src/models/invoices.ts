@@ -33,7 +33,6 @@ export const InInvoiceDetailsSchema = Schema.Struct({
 );
 export const InvoiceStatusSchema = Schema.Literal(
 	"pending",
-	"expired",
 	"paid",
 	"cancelled",
 	"refunded",
