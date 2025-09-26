@@ -46,8 +46,9 @@ export const GetInvoiceResponseSchema = Schema.Struct({
 	paymentMethodId: Schema.String.pipe(Schema.optionalWith({ nullable: true })),
 	customerId: ExpandableCustomerId,
 	expiresAt: Schema.optional(DateMaybeFromString),
-	createdAt: Schema.optional(DateMaybeFromString),
-	updatedAt: Schema.optional(DateMaybeFromString),
+	createdAt: DateMaybeFromString,
+	updatedAt: DateMaybeFromString,
+	effectiveAmount: Schema.BigDecimal,
 	details: Schema.Array(InInvoiceDetailsSchema),
 });
 export const ExpandableInvoiceId = Schema.Union(
