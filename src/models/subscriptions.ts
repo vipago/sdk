@@ -6,6 +6,7 @@ import { CustomerId, ExpandableCustomerId } from "./customer";
 import { ExpandablePriceId, PriceId } from "./products/prices";
 import { ExpandableTrackId, GetTrackItemSchema, TrackId } from "./tracks";
 import { ExpandableWorkspaceId } from "./workspace";
+import { LargeListOptions, PagedListResponse } from "./listOptions";
 
 export const SubscriptionStatusSchema = Schema.Literal(
 	"active",
@@ -65,11 +66,14 @@ export const ListSubscriptionQuerySchema = pipe(
 	Schema.Struct({
 		customerId: CustomerId,
 		priceId: PriceId,
+		...LargeListOptions,
 	}),
 	Schema.partial,
 	Schema.extend(TrackPartOnRequestOptional),
 );
-
+export const ListSubscriptionResponseSchema = PagedListResponse(
+	GetSubscriptionResponseSchema,
+);
 export const EditSubscriptionRequestSchema = pipe(
 	Schema.Struct({
 		status: Schema.Literal("cancel", "active"),

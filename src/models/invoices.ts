@@ -7,6 +7,7 @@ import { CurrencyCodeSchema, PriceId } from "./products/prices";
 import { SubscriptionId } from "./subscriptions";
 import { TrackId } from "./tracks";
 import { WorkspaceId } from "./workspace";
+import { LargeListOptions, PagedListResponse } from "./listOptions";
 export const OutInvoiceDetailsSchema = Schema.Union(
 	Schema.TaggedStruct("NormalItem", {
 		price: PriceId,
@@ -97,26 +98,14 @@ export const PayInvoiceResponseSchema = Schema.Union(
 		charged: Schema.Literal(true),
 	}),
 );
-export const InvoiceListResultSchema = Schema.Struct({
-	items: pipe(GetInvoiceResponseSchema, Schema.omit("details"), Schema.Array),
-	totalPages: Schema.Number,
-});
+export const InvoiceListResultSchema = pipe(
+	GetInvoiceResponseSchema,
+	Schema.omit("details"),
+	PagedListResponse,
+);
 
 export const InvoiceListOptions = Schema.Struct({
-	page: Schema.NumberFromString.pipe(
-		Schema.annotations({
-			description: "Número da página para paginação (começando em 0)",
-		}),
-		Schema.propertySignature,
-		Schema.withConstructorDefault(() => 0),
-	),
-	itemsPerPage: Schema.NumberFromString.pipe(
-		Schema.annotations({
-			description: "Quantidade de itens por página",
-		}),
-		Schema.propertySignature,
-		Schema.withConstructorDefault(() => 30),
-	),
+	...LargeListOptions,
 	workspaceId: WorkspaceId.pipe(
 		Schema.annotations({
 			description: "Filtrar faturas por workspace ID",

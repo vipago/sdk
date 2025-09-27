@@ -1,4 +1,3 @@
-import { Schema } from "effect";
 import { WorkspaceApiClient, route } from "../httpClient";
 import {
 	EditSubscriptionRequestSchema,
@@ -6,6 +5,7 @@ import {
 	ListSubscriptionQuerySchema,
 	RequestPlanChangeRequestSchema,
 	RequestPlanChangeResponseSchema,
+	ListSubscriptionResponseSchema,
 } from "../models/subscriptions";
 
 export const listSubscriptions = route({
@@ -14,7 +14,7 @@ export const listSubscriptions = route({
 	client: WorkspaceApiClient,
 	allowBody: true,
 	requestSchema: ListSubscriptionQuerySchema,
-	responseSchema: Schema.Array(GetSubscriptionResponseSchema),
+	responseSchema: ListSubscriptionResponseSchema,
 });
 
 export const getSubscription = route({

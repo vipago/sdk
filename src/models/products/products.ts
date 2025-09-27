@@ -1,6 +1,7 @@
 import { Schema } from "effect";
 import { idSchema } from "../../idGenerator";
 import { ExpandableWorkspaceId } from "../workspace";
+import { LargeListOptions } from "../listOptions";
 export const ProductId = idSchema("prod", "produto");
 export const GetProductResponseSchema = Schema.Struct({
 	id: ProductId,
@@ -21,16 +22,7 @@ export const ListProductsResponseSchema = Schema.Struct({
 });
 
 export type ListProductsResponse = typeof ListProductsResponseSchema.Type;
-export const ListProductsRequestSchema = Schema.Struct({
-	page: Schema.NumberFromString.pipe(
-		Schema.propertySignature,
-		Schema.withConstructorDefault(() => 0),
-	),
-	itemsPerPage: Schema.NumberFromString.pipe(
-		Schema.propertySignature,
-		Schema.withConstructorDefault(() => 30),
-	),
-});
+export const ListProductsRequestSchema = Schema.Struct(LargeListOptions);
 export type ListProductsRequest = typeof ListProductsRequestSchema.Type;
 export const CreateProductRequestSchema = Schema.Struct({
 	name: Schema.NonEmptyString,
