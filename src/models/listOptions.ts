@@ -14,7 +14,7 @@ export const LargeListOptions = {
 		Schema.propertySignature,
 		Schema.withConstructorDefault(() => 30),
 	),
-	sorting: Schema.parseJson(SortingStateSchema),
+	sorting: Schema.parseJson(SortingStateSchema).pipe(Schema.optional),
 };
 
 export const PagedListResponse = <S extends Schema.Schema<any, any, never>>(
