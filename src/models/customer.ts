@@ -2,8 +2,8 @@ import { Schema } from "effect";
 import { idSchema } from "../idGenerator";
 import { DateMaybeFromString } from "./DateMaybeFromString";
 import { Email } from "./emailValidator";
-import { SortingStateSchema } from "./sorting";
 import { ExpandableWorkspaceId } from "./workspace";
+import { LargeListOptions } from "./listOptions";
 export const CustomerId = idSchema("cust", "cliente");
 export const GetCustomerResponseSchema = Schema.Struct({
 	id: CustomerId,
@@ -26,17 +26,9 @@ export const ExpandableCustomerId = Schema.Union(
 
 export type GetCustomerResponse = typeof GetCustomerResponseSchema.Type;
 export const ListCustomersQuerySchema = Schema.Struct({
-	page: Schema.NumberFromString.pipe(
-		Schema.propertySignature,
-		Schema.withConstructorDefault(() => 0),
-	),
-	itemsPerPage: Schema.NumberFromString.pipe(
-		Schema.propertySignature,
-		Schema.withConstructorDefault(() => 30),
-	),
 	email: Schema.NonEmptyString,
 	name: Schema.NonEmptyString,
-	sorting: Schema.parseJson(SortingStateSchema),
+	...LargeListOptions,
 }).pipe(Schema.partial);
 export type ListCustomersQuery = typeof ListCustomersQuerySchema.Type;
 export const ListCustomersResponseSchema = Schema.Struct({

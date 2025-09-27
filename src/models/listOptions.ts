@@ -1,0 +1,22 @@
+import { Schema } from "effect";
+import { SortingStateSchema } from "./sorting";
+
+export const LargeListOptions = {
+	page: Schema.NumberFromString.pipe(
+		Schema.propertySignature,
+		Schema.withConstructorDefault(() => 0),
+	),
+	itemsPerPage: Schema.NumberFromString.pipe(
+		Schema.propertySignature,
+		Schema.withConstructorDefault(() => 30),
+	),
+	sorting: Schema.parseJson(SortingStateSchema),
+};
+
+export const PagedListResponse = <S extends Schema.Schema<any, any, never>>(
+	item: S,
+) =>
+	Schema.Struct({
+		items: Schema.Array(item),
+		totalPages: Schema.Number.pipe(Schema.int(), Schema.nonNegative()),
+	});
