@@ -17,7 +17,7 @@ export const LargeListOptions = {
 	sorting: Schema.parseJson(SortingStateSchema).pipe(Schema.optional),
 };
 
-export const PagedListResponse = <S extends Schema.Schema<any, any, never>>(
+export const PagedListResponse = <S extends Schema.Schema<any, any, any>>(
 	item: S,
 ) =>
 	Schema.Struct({

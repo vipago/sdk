@@ -1,9 +1,10 @@
-import { Schema } from "effect";
+import { pipe, Schema } from "effect";
 import { idSchema } from "../idGenerator";
 import { DateMaybeFromString } from "./DateMaybeFromString";
 import { Email } from "./emailValidator";
 import { ExpandableWorkspaceId } from "./workspace";
 import { LargeListOptions } from "./listOptions";
+import { SubscriptionId } from "./subscriptions";
 export const CustomerId = idSchema("cust", "cliente");
 export const GetCustomerResponseSchema = Schema.Struct({
 	id: CustomerId,
@@ -16,6 +17,19 @@ export const GetCustomerResponseSchema = Schema.Struct({
 	),
 	createdAt: DateMaybeFromString,
 	updatedAt: DateMaybeFromString,
+	tracks: pipe(
+		{
+			key: Schema.String,
+			value: Schema.Struct({
+				plan: Schema.Union(Schema.NumberFromString, Schema.String),
+				subId: SubscriptionId,
+				status: Schema.Literal("active", "zombie"),
+			}),
+		},
+		Schema.Record,
+		Schema.partial,
+		Schema.optional,
+	),
 }).annotations({
 	title: "Customer",
 });
