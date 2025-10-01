@@ -4,6 +4,7 @@ import { DateMaybeFromString } from "./DateMaybeFromString";
 import { Email } from "./emailValidator";
 import { ExpandableWorkspaceId } from "./workspace";
 import { LargeListOptions } from "./listOptions";
+import { GetTrackItemSchema } from "./tracks";
 import { SubscriptionId } from "./subscriptions";
 export const CustomerId = idSchema("cust", "cliente");
 export const GetCustomerResponseSchema = Schema.Struct({
@@ -17,11 +18,11 @@ export const GetCustomerResponseSchema = Schema.Struct({
 	),
 	createdAt: DateMaybeFromString,
 	updatedAt: DateMaybeFromString,
-	tracks: pipe(
+	tracks: Schema.suspend(() => pipe(
 		{
 			key: Schema.String,
 			value: Schema.Struct({
-				plan: Schema.Union(Schema.NumberFromString, Schema.String),
+				plan: Schema.suspend(() => GetTrackItemSchema.fields.plan),
 				subId: SubscriptionId,
 				status: Schema.Literal("active", "zombie"),
 			}),
@@ -29,7 +30,7 @@ export const GetCustomerResponseSchema = Schema.Struct({
 		Schema.Record,
 		Schema.partial,
 		Schema.optional,
-	),
+	)),
 }).annotations({
 	title: "Customer",
 });

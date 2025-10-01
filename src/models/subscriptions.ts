@@ -25,11 +25,11 @@ const TrackPart = Schema.Union(
 	Schema.Struct({}),
 );
 export const SubscriptionId = idSchema("sub", "subscrição");
-export const GetSubscriptionResponseSchema = pipe(
+export const GetSubscriptionResponseSchema = Schema.suspend(() => pipe(
 	Schema.Struct({
 		id: SubscriptionId,
 		workspaceId: ExpandableWorkspaceId,
-		customerId: ExpandableCustomerId,
+		customerId: Schema.suspend(() => ExpandableCustomerId),
 		priceId: ExpandablePriceId,
 		anchor: DateMaybeFromString,
 		paymentMethodId: Schema.String.pipe(Schema.NullOr),
@@ -38,7 +38,7 @@ export const GetSubscriptionResponseSchema = pipe(
 		status: SubscriptionStatusSchema,
 	}),
 	Schema.extend(TrackPart),
-);
+));
 export const ExpandableSubscriptionId = Schema.Union(
 	SubscriptionId,
 	GetSubscriptionResponseSchema,
@@ -62,7 +62,7 @@ const TrackPartOnRequestOptional = Schema.Union(
 	TrackPartOnRequest,
 	Schema.Struct({}),
 );
-export const ListSubscriptionQuerySchema = pipe(
+export const ListSubscriptionQuerySchema = Schema.extend(() => pipe(
 	Schema.Struct({
 		customerId: CustomerId,
 		priceId: PriceId,
@@ -70,7 +70,7 @@ export const ListSubscriptionQuerySchema = pipe(
 	}),
 	Schema.partial,
 	Schema.extend(TrackPartOnRequestOptional),
-);
+));
 export const ListSubscriptionResponseSchema = PagedListResponse(
 	GetSubscriptionResponseSchema,
 );
