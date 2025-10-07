@@ -1,8 +1,8 @@
 import { Schema } from "effect";
-import { idSchema } from "../idGenerator";
-import { CustomerId, ExpandableCustomerId } from "./customer";
+import { ExpandableCustomerId } from "./customer";
 import { CurrencyCodeSchema } from "./products/prices";
 import { ExpandableWorkspaceId } from "./workspace";
+import { CustomerId, PaymentMethodId } from "./ids";
 
 export namespace PaymentMethod {
 	export const AvailableType = Schema.Literal("card", "paypal", "pix");
@@ -53,8 +53,6 @@ export namespace NewPaymentMethodDetails {
 	export const NewPaymentMethodDetails = Schema.Union(Card);
 	export type NewPaymentMethodDetails = typeof NewPaymentMethodDetails.Type;
 }
-
-export const PaymentMethodId = idSchema("pm", "Método de Pagamento");
 
 export const GetPaymentMethodResponseSchema = Schema.Struct({
 	id: PaymentMethodId,

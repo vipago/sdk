@@ -1,12 +1,12 @@
 import { Schema, pipe } from "effect";
-import { ExpandableInvoiceId } from "..";
-import { idSchema } from "../idGenerator";
 import { DateMaybeFromString } from "./DateMaybeFromString";
-import { CustomerId, ExpandableCustomerId } from "./customer";
-import { ExpandablePriceId, PriceId } from "./products/prices";
-import { ExpandableTrackId, GetTrackItemSchema, TrackId } from "./tracks";
+import { ExpandableCustomerId } from "./customer";
+import { ExpandablePriceId } from "./products/prices";
+import { ExpandableTrackId, GetTrackItemSchema } from "./tracks";
 import { ExpandableWorkspaceId } from "./workspace";
 import { LargeListOptions, PagedListResponse } from "./listOptions";
+import { CustomerId, PriceId, SubscriptionId, TrackId } from "./ids";
+import { ExpandableInvoiceId } from "./invoices";
 
 export const SubscriptionStatusSchema = Schema.Literal(
 	"active",
@@ -24,12 +24,11 @@ const TrackPart = Schema.Union(
 	}),
 	Schema.Struct({}),
 );
-export const SubscriptionId = idSchema("sub", "subscrição");
-export const GetSubscriptionResponseSchema = Schema.suspend(() => pipe(
+export const GetSubscriptionResponseSchema = pipe(
 	Schema.Struct({
 		id: SubscriptionId,
 		workspaceId: ExpandableWorkspaceId,
-		customerId: Schema.suspend(() => ExpandableCustomerId),
+		customerId: ExpandableCustomerId,
 		priceId: ExpandablePriceId,
 		anchor: DateMaybeFromString,
 		paymentMethodId: Schema.String.pipe(Schema.NullOr),
@@ -38,7 +37,7 @@ export const GetSubscriptionResponseSchema = Schema.suspend(() => pipe(
 		status: SubscriptionStatusSchema,
 	}),
 	Schema.extend(TrackPart),
-));
+);
 export const ExpandableSubscriptionId = Schema.Union(
 	SubscriptionId,
 	GetSubscriptionResponseSchema,
@@ -62,15 +61,17 @@ const TrackPartOnRequestOptional = Schema.Union(
 	TrackPartOnRequest,
 	Schema.Struct({}),
 );
-export const ListSubscriptionQuerySchema = Schema.extend(() => pipe(
-	Schema.Struct({
-		customerId: CustomerId,
-		priceId: PriceId,
-		...LargeListOptions,
-	}),
-	Schema.partial,
-	Schema.extend(TrackPartOnRequestOptional),
-));
+export const ListSubscriptionQuerySchema = Schema.extend(
+	pipe(
+		Schema.Struct({
+			customerId: CustomerId,
+			priceId: PriceId,
+			...LargeListOptions,
+		}),
+		Schema.partial,
+		Schema.extend(TrackPartOnRequestOptional),
+	),
+);
 export const ListSubscriptionResponseSchema = PagedListResponse(
 	GetSubscriptionResponseSchema,
 );
@@ -97,6 +98,6 @@ export const RequestPlanChangeRequestSchema = pipe(
 );
 
 export const RequestPlanChangeResponseSchema = Schema.Struct({
-	invoiceId: Schema.suspend(() => ExpandableInvoiceId),
+	invoiceId: ExpandableInvoiceId,
 	charged: Schema.Boolean,
 });

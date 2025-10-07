@@ -5,8 +5,7 @@ import {
 } from "@effect/platform";
 import { ResponseError } from "@effect/platform/HttpClientError";
 import { Config, Effect, type Layer, Option, Schema, pipe } from "effect";
-import { type GenerateExpandPaths, expandSchema } from "../expand";
-
+import type { GenerateExpandPaths } from "../expand";
 /** @internal */
 export const filterStatusOk = (
 	self: HttpClientResponse.HttpClientResponse,
@@ -176,7 +175,11 @@ export const routeWithResponse =
 				Effect.orDie,
 				Effect.flatMap((yield* HttpClient.HttpClient).execute),
 				Effect.andThen(res => res.json),
-				Effect.andThen(res =>
+				Effect.andThen(res => Effect.gen(function*() {
+					const {expandSchema} = yield* Effect.promise(() => import("../expand"));
+					return {expandSchema, res};
+				})),
+				Effect.andThen(({res, expandSchema}) =>
 					Schema.decodeUnknown(
 						expandSchema(unexpandedResponseSchema, expand ?? ([] as const)),
 					)(res),

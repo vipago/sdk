@@ -1,8 +1,7 @@
 import { Schema } from "effect";
 import { UserFeatures } from "../features";
-import { idSchema } from "../idGenerator";
 import { Email } from "./emailValidator";
-export const UserId = idSchema("us", "usuário");
+import { UserId } from "./ids";
 export const GetUserResponseSchema = Schema.Struct({
 	id: UserId,
 	name: Schema.NonEmptyString,

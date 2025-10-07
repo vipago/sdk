@@ -3,15 +3,13 @@ import { idSchema } from "../idGenerator";
 import { DateMaybeFromString } from "./DateMaybeFromString";
 import { GetPriceResponseSchema } from "./products/prices";
 import { GetWorkspaceResponseSchema } from "./workspace";
-const indexNumberSchema = Schema.Union(
-	Schema.NumberFromString,
-	Schema.Number,
-).pipe(Schema.positive(), Schema.int());
+import { TrackId } from "./ids";
+import { indexNumberSchema, trackPlanNumber } from "./trackPlanNumber";
+
 export const GetTrackItemSchema = Schema.Struct({
-	plan: Schema.Union(indexNumberSchema, Schema.String),
+	plan: trackPlanNumber,
 	priceId: Schema.Union(idSchema("price"), GetPriceResponseSchema),
 });
-export const TrackId = idSchema("track", "track");
 export const GetTrackResponseSchema = Schema.Struct({
 	id: TrackId,
 	workspaceId: Schema.Union(idSchema("wosp"), GetWorkspaceResponseSchema),

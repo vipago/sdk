@@ -3,10 +3,10 @@ import { WorkspaceFeatures } from "../features";
 import { idSchema } from "../idGenerator";
 import { DateMaybeFromString } from "./DateMaybeFromString";
 import { GetUserResponseSchema } from "./user";
-export const WorkspaceId = idSchema("wosp", "workspace");
+import { WorkspaceId } from "./ids";
 
 export const GetWorkspaceResponseSchema = Schema.Struct({
-	id: idSchema("wosp", "workspace"),
+	id: WorkspaceId,
 	name: Schema.NonEmptyString,
 	ownerId: Schema.Union(
 		idSchema("us", "user"),

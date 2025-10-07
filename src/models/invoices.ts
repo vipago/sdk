@@ -1,13 +1,17 @@
 import { BigDecimal, pipe, Schema } from "effect";
-import { idSchema } from "../idGenerator";
 import { DateMaybeFromString } from "./DateMaybeFromString";
-import { CustomerId, ExpandableCustomerId } from "./customer";
-import { PaymentMethodId } from "./paymentMethods";
-import { CurrencyCodeSchema, PriceId } from "./products/prices";
-import { SubscriptionId } from "./subscriptions";
-import { TrackId } from "./tracks";
-import { WorkspaceId } from "./workspace";
+import { ExpandableCustomerId } from "./customer";
+import { CurrencyCodeSchema } from "./products/prices";
 import { LargeListOptions, PagedListResponse } from "./listOptions";
+import {
+	CustomerId,
+	InvoiceId,
+	PaymentMethodId,
+	PriceId,
+	SubscriptionId,
+	TrackId,
+	WorkspaceId,
+} from "./ids";
 export const OutInvoiceDetailsSchema = Schema.Union(
 	Schema.TaggedStruct("NormalItem", {
 		price: PriceId,
@@ -38,7 +42,6 @@ export const InvoiceStatusSchema = Schema.Literal(
 	"cancelled",
 	"refunded",
 );
-export const InvoiceId = idSchema("inv", "fatura");
 export const GetInvoiceResponseSchema = Schema.Struct({
 	id: InvoiceId,
 	amount: Schema.BigDecimal,

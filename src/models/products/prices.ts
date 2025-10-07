@@ -1,9 +1,9 @@
 import { codes as currencyCodes } from "currency-codes-ts";
 import type { CurrencyCode } from "currency-codes-ts/dist/types";
 import { Duration, Schema } from "effect";
-import { idSchema } from "../../idGenerator";
 import { DateMaybeFromString } from "../DateMaybeFromString";
 import { ExpandableProductId } from "./products";
+import { PriceId } from "../ids";
 export namespace BillingMode {
 	const Recurring = Schema.TaggedStruct("recurring", {
 		recurringInterval: Schema.DurationFromMillis,
@@ -57,8 +57,6 @@ const checkDefaultCurrency = (price: {
 	price.currencyToPrice[price.defaultCurrency] == null
 		? "Default currency amount was not found in the currency-amounts map"
 		: undefined;
-
-export const PriceId = idSchema("price", "preço");
 
 export const GetPriceResponseSchema = Schema.Struct({
 	id: PriceId,

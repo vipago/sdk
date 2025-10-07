@@ -1,3 +1,11 @@
+
+
+// ------------------ Utils --------------------
+export * as config from "./config";
+export * as error from "./error";
+export * as expand from "./expand";
+export * as idGenerator from "./idGenerator";
+export * from "./features";
 // -------------------- Endpoints --------------------
 export * from "./endpoints/customer";
 export * from "./endpoints/invoices";
@@ -27,9 +35,3 @@ export * from "./models/user";
 export * from "./models/workspace";
 export * from "./models/workspaceGatewayPreferences";
 
-// ------------------ Utils --------------------
-export * as config from "./config";
-export * as error from "./error";
-export * as expand from "./expand";
-export * as idGenerator from "./idGenerator";
-export * from "./features";
