@@ -4,9 +4,9 @@ import { SortingStateSchema } from "./sorting";
 export const LargeListOptions = {
 	page: Schema.NumberFromString.pipe(
 		Schema.int(),
-		Schema.nonNegative(),
+		Schema.positive(),
 		Schema.propertySignature,
-		Schema.withConstructorDefault(() => 0),
+		Schema.withConstructorDefault(() => 1),
 	),
 	itemsPerPage: Schema.NumberFromString.pipe(
 		Schema.int(),
@@ -17,7 +17,7 @@ export const LargeListOptions = {
 	sorting: Schema.parseJson(SortingStateSchema).pipe(Schema.optional),
 };
 
-export const PagedListResponse = <S extends Schema.Schema<any, any, any>>(
+export const PagedListResponse = <S extends Schema.Schema<any, any, never>>(
 	item: S,
 ) =>
 	Schema.Struct({
