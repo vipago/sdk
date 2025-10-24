@@ -8,6 +8,7 @@ import { GetPriceResponseSchema } from "./models/products/prices";
 import { GetProductResponseSchema } from "./models/products/products";
 import { GetUserResponseSchema } from "./models/user";
 import { GetWorkspaceResponseSchema } from "./models/workspace";
+import { GetTrackResponseSchema } from "./models/tracks";
 
 export const PrefixSchemaMap = {
 	us: GetUserResponseSchema,
@@ -18,6 +19,7 @@ export const PrefixSchemaMap = {
 	pm: GetPaymentMethodResponseSchema,
 	intgr: GetIntegrationResponseSchema,
 	price: GetPriceResponseSchema,
+	track: GetTrackResponseSchema,
 };
 export type PrefixMap = tf.SimplifyDeep<{
 	[K in keyof typeof PrefixSchemaMap]: (typeof PrefixSchemaMap)[K]["Type"];
