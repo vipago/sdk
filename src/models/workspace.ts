@@ -2,8 +2,8 @@ import { Schema } from "effect";
 import { WorkspaceFeatures } from "../features";
 import { idSchema } from "../idGenerator";
 import { DateMaybeFromString } from "./DateMaybeFromString";
-import { GetUserResponseSchema } from "./user";
 import { WorkspaceId } from "./ids";
+import { GetUserResponseSchema } from "./user";
 
 export const GetWorkspaceResponseSchema = Schema.Struct({
 	id: WorkspaceId,

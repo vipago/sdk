@@ -1,10 +1,10 @@
-import { pipe, Schema } from "effect";
+import { Schema, pipe } from "effect";
 import { DateMaybeFromString } from "./DateMaybeFromString";
 import { Email } from "./emailValidator";
-import { ExpandableWorkspaceId } from "./workspace";
-import { LargeListOptions } from "./listOptions";
 import { CustomerId, SubscriptionId } from "./ids";
+import { LargeListOptions } from "./listOptions";
 import { trackPlanNumber } from "./trackPlanNumber";
+import { ExpandableWorkspaceId } from "./workspace";
 export const GetCustomerResponseSchema = Schema.Struct({
 	id: CustomerId,
 	name: Schema.NonEmptyString,

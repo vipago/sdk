@@ -1,8 +1,8 @@
 import { Schema } from "effect";
 import { ExpandableCustomerId } from "./customer";
+import { CustomerId, PaymentMethodId } from "./ids";
 import { CurrencyCodeSchema } from "./products/prices";
 import { ExpandableWorkspaceId } from "./workspace";
-import { CustomerId, PaymentMethodId } from "./ids";
 
 export namespace PaymentMethod {
 	export const AvailableType = Schema.Literal("card", "paypal", "pix");

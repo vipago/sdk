@@ -1,8 +1,6 @@
-import { BigDecimal, pipe, Schema } from "effect";
+import { BigDecimal, Schema, pipe } from "effect";
 import { DateMaybeFromString } from "./DateMaybeFromString";
 import { ExpandableCustomerId } from "./customer";
-import { CurrencyCodeSchema } from "./products/prices";
-import { LargeListOptions, PagedListResponse } from "./listOptions";
 import {
 	CustomerId,
 	InvoiceId,
@@ -12,6 +10,8 @@ import {
 	TrackId,
 	WorkspaceId,
 } from "./ids";
+import { LargeListOptions, PagedListResponse } from "./listOptions";
+import { CurrencyCodeSchema } from "./products/prices";
 export const OutInvoiceDetailsSchema = Schema.Union(
 	Schema.TaggedStruct("NormalItem", {
 		price: PriceId,

@@ -175,11 +175,15 @@ export const routeWithResponse =
 				Effect.orDie,
 				Effect.flatMap((yield* HttpClient.HttpClient).execute),
 				Effect.andThen(res => res.json),
-				Effect.andThen(res => Effect.gen(function*() {
-					const {expandSchema} = yield* Effect.promise(() => import("../expand"));
-					return {expandSchema, res};
-				})),
-				Effect.andThen(({res, expandSchema}) =>
+				Effect.andThen(res =>
+					Effect.gen(function* () {
+						const { expandSchema } = yield* Effect.promise(
+							() => import("../expand"),
+						);
+						return { expandSchema, res };
+					}),
+				),
+				Effect.andThen(({ res, expandSchema }) =>
 					Schema.decodeUnknown(
 						expandSchema(unexpandedResponseSchema, expand ?? ([] as const)),
 					)(res),

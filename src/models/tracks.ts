@@ -1,10 +1,10 @@
 import { Schema, pipe } from "effect";
 import { idSchema } from "../idGenerator";
 import { DateMaybeFromString } from "./DateMaybeFromString";
-import { GetPriceResponseSchema } from "./products/prices";
-import { GetWorkspaceResponseSchema } from "./workspace";
 import { TrackId } from "./ids";
+import { GetPriceResponseSchema } from "./products/prices";
 import { indexNumberSchema, trackPlanNumber } from "./trackPlanNumber";
+import { GetWorkspaceResponseSchema } from "./workspace";
 
 export const GetTrackItemSchema = Schema.Struct({
 	plan: trackPlanNumber(Schema.Union(Schema.Number, Schema.NumberFromString)),

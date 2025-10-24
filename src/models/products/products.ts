@@ -1,7 +1,7 @@
 import { Schema } from "effect";
-import { ExpandableWorkspaceId } from "../workspace";
-import { LargeListOptions } from "../listOptions";
 import { ProductId } from "../ids";
+import { LargeListOptions } from "../listOptions";
+import { ExpandableWorkspaceId } from "../workspace";
 export const GetProductResponseSchema = Schema.Struct({
 	id: ProductId,
 	name: Schema.NonEmptyString,
