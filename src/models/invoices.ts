@@ -55,6 +55,7 @@ export const GetInvoiceResponseSchema = Schema.Struct({
 	effectiveAmount: Schema.BigDecimal,
 	details: Schema.Array(InInvoiceDetailsSchema),
 });
+
 export const ExpandableInvoiceId = Schema.Union(
 	InvoiceId,
 	GetInvoiceResponseSchema,

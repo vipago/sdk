@@ -1,8 +1,9 @@
 import { Schema } from "effect";
 
-export const indexNumberSchema = Schema.Union(
-	Schema.NumberFromString,
-	Schema.Number,
-).pipe(Schema.positive(), Schema.int());
+export const indexNumberSchema = (
+	s: Schema.Schema<number, any, never> = Schema.Number,
+) => s.pipe(Schema.nonNegative(), Schema.int());
 
-export const trackPlanNumber = Schema.Union(indexNumberSchema, Schema.String);
+export const trackPlanNumber = (
+	s: Schema.Schema<number, any, never> = Schema.Number,
+) => Schema.Union(indexNumberSchema(s), Schema.String);

@@ -7,7 +7,7 @@ import { TrackId } from "./ids";
 import { indexNumberSchema, trackPlanNumber } from "./trackPlanNumber";
 
 export const GetTrackItemSchema = Schema.Struct({
-	plan: trackPlanNumber,
+	plan: trackPlanNumber(Schema.Union(Schema.Number, Schema.NumberFromString)),
 	priceId: Schema.Union(idSchema("price"), GetPriceResponseSchema),
 });
 export const GetTrackResponseSchema = Schema.Struct({
@@ -33,11 +33,11 @@ export const EditTrackRequestSchema = Schema.Struct({
 export const AddPlanToTrackRequestSchema = Schema.Struct({
 	plan: GetTrackItemSchema.fields.plan,
 	priceId: idSchema("price"),
-	position: pipe(indexNumberSchema, Schema.optional),
+	position: pipe(indexNumberSchema(), Schema.optional),
 });
 
 export const MovePlanInTrackRequestSchema = Schema.Struct({
-	newPosition: indexNumberSchema,
+	newPosition: indexNumberSchema(),
 });
 export const EditTrackPlanRequestSchema = pipe(
 	Schema.Struct({

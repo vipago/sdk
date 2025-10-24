@@ -61,17 +61,16 @@ const TrackPartOnRequestOptional = Schema.Union(
 	TrackPartOnRequest,
 	Schema.Struct({}),
 );
-export const ListSubscriptionQuerySchema = Schema.extend(
-	pipe(
-		Schema.Struct({
-			customerId: CustomerId,
-			priceId: PriceId,
-			...LargeListOptions,
-		}),
-		Schema.partial,
-		Schema.extend(TrackPartOnRequestOptional),
-	),
+export const ListSubscriptionQuerySchema = pipe(
+	Schema.Struct({
+		customerId: CustomerId,
+		priceId: PriceId,
+		...LargeListOptions,
+	}),
+	Schema.partial,
+	Schema.extend(TrackPartOnRequestOptional),
 );
+ListSubscriptionQuerySchema.Encoded satisfies Record<string, string>;
 export const ListSubscriptionResponseSchema = PagedListResponse(
 	GetSubscriptionResponseSchema,
 );

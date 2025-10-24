@@ -20,7 +20,7 @@ export const GetCustomerResponseSchema = Schema.Struct({
 		Schema.Record({
 			key: Schema.String,
 			value: Schema.Struct({
-				plan: trackPlanNumber,
+				plan: trackPlanNumber(),
 				subId: SubscriptionId,
 				status: Schema.Literal("active", "zombie"),
 			}),
