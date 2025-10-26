@@ -70,6 +70,10 @@ export namespace WorkspaceFeatures {
 		"tracks:read",
 		"tracks:delete",
 		"tracks:update",
+		"webhooks:read",
+		"webhooks:write",
+		"webhooks:deliveries:read",
+		"webhooks:deliveries:retry",
 	] as const);
 	export type Feature = ElementsOfSet<typeof AVAILABLE_FEATURES>;
 	export const DEFAULT_FEATURES: Set<Feature> = new Set([
@@ -109,6 +113,10 @@ export namespace WorkspaceFeatures {
 		"tracks:read",
 		"tracks:delete",
 		"tracks:update",
+		"webhooks:read",
+		"webhooks:write",
+		"webhooks:deliveries:read",
+		"webhooks:deliveries:retry",
 	] as const);
 	export const VALIDATOR = Schema.Literal(...AVAILABLE_FEATURES).annotations({
 		title: "Permissão",
