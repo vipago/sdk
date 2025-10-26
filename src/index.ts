@@ -18,6 +18,7 @@ export * from "./endpoints/subscriptions";
 export * from "./endpoints/tracks";
 export * from "./endpoints/user";
 export * from "./endpoints/workspaces";
+export * from "./endpoints/webhooks";
 
 // -------------------- Models --------------------
 export * from "./models/DateMaybeFromString";
@@ -33,3 +34,4 @@ export * from "./models/tracks";
 export * from "./models/user";
 export * from "./models/workspace";
 export * from "./models/workspaceGatewayPreferences";
+export * from "./models/webhooks";
