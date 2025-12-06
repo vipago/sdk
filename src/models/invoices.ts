@@ -131,6 +131,9 @@ export const InvoiceListOptions = Schema.Struct({
 	subscriptionId: SubscriptionId.pipe(Schema.optional),
 });
 
+export const ListInvoicesRequestSchema = InvoiceListOptions;
+export const ListInvoicesResponseSchema = InvoiceListResultSchema;
+
 export type InvoiceDetails = typeof OutInvoiceDetailsSchema.Type;
 export type InvoiceStatus = typeof InvoiceStatusSchema.Type;
 export type GetInvoiceResponse = typeof GetInvoiceResponseSchema.Type;
@@ -139,3 +142,5 @@ export type PayInvoiceRequest = typeof PayInvoiceRequestSchema.Type;
 export type PayInvoiceResponse = typeof PayInvoiceResponseSchema.Type;
 export type InvoiceListResult = typeof InvoiceListResultSchema.Type;
 export type InvoiceListOptionsType = typeof InvoiceListOptions.Type;
+export type ListInvoicesRequest = typeof ListInvoicesRequestSchema.Type;
+export type ListInvoicesResponse = typeof ListInvoicesResponseSchema.Type;
