@@ -19,6 +19,8 @@ export namespace UserFeatures {
 		"user:read",
 		"devtools",
 		"integrations:read:unapproved",
+		"admin:panel",
+		"admin:integrations"
 	] as const);
 	export type Feature = ElementsOfSet<typeof AVAILABLE_FEATURES>;
 	export const DEFAULT_FEATURES = new Set([
