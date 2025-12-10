@@ -12,9 +12,9 @@ export const validateIntegration = route({
 	responseSchema: GetIntegrationResponseSchema,
 });
 
-export const listUnvalidatedIntegrations = route({
+export const listPendingIntegrations = route({
 	method: "get",
-	url: "/api/v1/admin/integrations/unvalidated",
+	url: "/api/v1/admin/integrations/pending",
 	client: AuthenticatedApiClient,
 	responseSchema: ListIntegrationsResponseSchema,
 });
