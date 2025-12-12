@@ -4,17 +4,17 @@ import {
 	ListIntegrationsResponseSchema,
 } from "../models/integrations";
 
-export const validateIntegration = route({
-	method: "patch",
+export const approveIntegration = route({
+	method: "post",
 	url: (integrationId: string) =>
-		`/api/v1/admin/integrations/${integrationId}/validate`,
+		`/api/v1/integrations/${integrationId}/admin_approve`,
 	client: AuthenticatedApiClient,
 	responseSchema: GetIntegrationResponseSchema,
 });
 
 export const listPendingIntegrations = route({
 	method: "get",
-	url: "/api/v1/admin/integrations/pending",
+	url: "/api/v1/integrations/admin_pending",
 	client: AuthenticatedApiClient,
 	responseSchema: ListIntegrationsResponseSchema,
 });

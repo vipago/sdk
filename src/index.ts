@@ -19,6 +19,7 @@ export * from "./endpoints/tracks";
 export * from "./endpoints/user";
 export * from "./endpoints/workspaces";
 export * from "./endpoints/webhooks";
+export * as __admin__ from "./endpoints/admin";
 
 // -------------------- Models --------------------
 export * from "./models/DateMaybeFromString";
