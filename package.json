@@ -12,7 +12,6 @@
 		"@types/bun": "latest",
 		"cookie": "1.0.2",
 		"currency-codes-ts": "3.0.0",
-		"effect": "^3.19.4",
 		"type-fest": "4.39.1"
 	},
 	"devDependencies": {
@@ -20,7 +19,7 @@
 	},
 	"peerDependencies": {
 		"typescript": "5.0.0",
-		"effect": "3.19.4",
+		"effect": "^3.19.4",
 		"@effect/opentelemetry": "0.42.5",
 		"@effect/platform": "^0.93.3",
 		"@effect/platform-browser": "0.65.2"
